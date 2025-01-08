@@ -1,4 +1,5 @@
 import d3 from 'd3';
+import {Stipple} from "./Stipple";
 
 export class DensityFunction2D {
     /**
@@ -31,7 +32,6 @@ export class DensityFunction2D {
         }
     }
 
-
     /**
      * Get the density at a given point.
      * @param x
@@ -62,5 +62,30 @@ export class DensityFunction2D {
         return sum;
     }
 
+    assignDensity(stipples: Stipple[], voronoi: d3.Voronoi<number>) {
+        stipples.forEach(s => s.density = 0);
+        let lastFound = 0;
+        let lastFoundRow = Array(this.width);
+        for (let y = 0; y < this.height; ++y) {
+            for (let x = 0; x < this.width; ++x) {
+                // We use either the cell index of the pixel above or the pixel to the left, but prefer the one to the
+                // top. Both choices are correct in approximately 60% of the cases, but if the choice was wrong then
+                // choosing the pixel to the top will require us only to search (width + 1) cells in the worst case
+                // whereas when choosing the pixel to the pixel to left we would have to search almost all other cells
+                // in the worst case (because of how Delaunay.find is implemented).
+                if (lastFoundRow[x]) {
+                    lastFound = lastFoundRow[x];
+                }
+                lastFound = voronoi.delaunay.find(x, y, lastFound);
+                lastFoundRow[x] = lastFound;
+                if (stipples[lastFound] === undefined) {
+                    console.log("undefined")
+                }
+
+                stipples[lastFound].density += this.densityAt(x, y);
+            }
+        }
+        return stipples;
+    }
 
 }

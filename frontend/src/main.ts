@@ -33,8 +33,10 @@ context.configure({
 
 import shader from './shaders/shader.wgsl';
 import {mat4, vec3} from "webgpu-matrix";
-import Camera from "./camera";
+// import Camera from "./camera";
 import {OrthoCamera} from "./ortho_camera";
+import {CircleHelper} from "./Stippling/Circle";
+import {BufferHandler} from "./Stippling/BufferHandler";
 
 const shaderModule = device.createShaderModule({
     label: 'circle shader module',
@@ -75,15 +77,20 @@ const pipeline = device.createRenderPipeline({
     }
 });
 
-const kNumObjects = 1e4;
-console.log("kNumObjects", kNumObjects);
-
-
+// ! Used for initial buffer size
 const staticUnitSize =
     1 * 4 + // density is 1 32bit float
     2 * 4 +  // offset is 2 32bit floats
     1 * 4;  // radius is 1 32bit floats
-const staticVertexBufferSize = staticUnitSize * kNumObjects;
+
+const storageBufferLimit = device.limits.maxStorageBufferBindingSize;
+const maxNumberOfObjects = Math.floor(storageBufferLimit / staticUnitSize);
+const kNumObjects = 1e4;
+console.log("maxNumberOfObjects", maxNumberOfObjects);
+console.log("kNumObjects", kNumObjects);
+
+
+const staticVertexBufferSize = staticUnitSize * maxNumberOfObjects;
 console.log("staticVertexBufferSize", staticVertexBufferSize);
 
 const staticVertexBuffer = device.createBuffer({
@@ -91,6 +98,21 @@ const staticVertexBuffer = device.createBuffer({
     size: staticVertexBufferSize,
     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
 });
+
+const bufferHandler = new BufferHandler(device, staticVertexBuffer, staticVertexBufferSize);
+bufferHandler.register_change(() => {
+    requestAnimationFrame(generateFrame);
+});
+
+const button = document.getElementById("btn-addData") as HTMLButtonElement;
+button.onclick = async () => {
+    bufferHandler.addNewData(CircleHelper.circlesToBuffers(CircleHelper.createRandomCircles(100, 10, 10)));
+}
+
+const button_clear = document.getElementById("btn-clearData") as HTMLButtonElement;
+button_clear.onclick = async () => {
+    bufferHandler.clearBuffer();
+}
 
 const uniformBufferSize = 4 * 4 // screen size vec2 upsized to vec4 by padding
     + 16 * 4; // mvp mat4
@@ -111,27 +133,31 @@ const bindGroup = device.createBindGroup({
 
 
 // Offsets
-const kColorOffset = 0;
-const kOffsetOffset = 1;
-const kRadiusOffset = 3;
+// const kColorOffset = 0;
+// const kOffsetOffset = 1;
+// const kRadiusOffset = 3;
 
-function random_min_max(min: number = 0, max: number = 1) {
-    return min + Math.random() * (max - min);
-}
+// function random_min_max(min: number = 0, max: number = 1) {
+//     return min + Math.random() * (max - min);
+// }
+//
+// const staticVertexValues = new Float32Array(staticVertexBufferSize / 4);
+// const scalar = Math.pow(10, Math.log10(kNumObjects) - 2);
+// console.log("scalar", scalar, "log", Math.log10(kNumObjects) - 2);
+// for (let i = 0; i < kNumObjects; ++i) {
+//     const staticOffset = i * (staticUnitSize / 4);
+//
+//     // These are only set once so set them now
+//     staticVertexValues.set([random_min_max()], staticOffset + kColorOffset);        // set the density
+//     staticVertexValues.set([random_min_max(-0.9 * scalar, 0.9 * scalar), random_min_max(-0.9 * scalar, 0.9 * scalar)], staticOffset + kOffsetOffset);      // set the offset
+//     const radius = random_min_max(0.2, 0.5);
+//     staticVertexValues.set([radius / aspect], staticOffset + kRadiusOffset);      // set the radius
+// }
+// device.queue.writeBuffer(staticVertexBuffer, 0, staticVertexValues);
 
-const staticVertexValues = new Float32Array(staticVertexBufferSize / 4);
-const scalar = Math.pow(10, Math.log10(kNumObjects) - 2);
-console.log("scalar", scalar, "log", Math.log10(kNumObjects) - 2);
-for (let i = 0; i < kNumObjects; ++i) {
-    const staticOffset = i * (staticUnitSize / 4);
-
-    // These are only set once so set them now
-    staticVertexValues.set([random_min_max()], staticOffset + kColorOffset);        // set the density
-    staticVertexValues.set([random_min_max(-0.9 * scalar, 0.9 * scalar), random_min_max(-0.9 * scalar, 0.9 * scalar)], staticOffset + kOffsetOffset);      // set the offset
-    const radius = random_min_max(0.2, 0.5);
-    staticVertexValues.set([radius / aspect], staticOffset + kRadiusOffset);      // set the radius
-}
-device.queue.writeBuffer(staticVertexBuffer, 0, staticVertexValues);
+// let circleBuffer: Float32Array = CircleHelper.circlesToBuffers(CircleHelper.createRandomCircles(100, 10, 10))
+// console.log(`Writing ${circleBuffer.length} bytes to the GPU. Total buffer size is ${staticVertexBuffer.size} bytes.`);
+// device.queue.writeBuffer(staticVertexBuffer, 0, circleBuffer);
 
 
 const {vertexData, numVertices} = createCircleVertices(32);
@@ -141,6 +167,10 @@ const vertexBuffer = device.createBuffer({
     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
 });
 device.queue.writeBuffer(vertexBuffer, 0, vertexData);
+
+function updateVertexBuffer(newData: Float32Array) {
+    device.queue.writeBuffer(staticVertexBuffer, 0, newData);
+}
 
 const depthTexture = device.createTexture({
     label: 'depth-stencil texture',
