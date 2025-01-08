@@ -139,35 +139,42 @@ const bindGroup = device.createBindGroup({
 });
 
 // * Trying it out with a custom Density Function
-const stipplesResponse = await fetchStiples("air_pollution", {
-  minLat: "42.4160",
-  maxLat: "46.5385",
-  minLng: "13.4932",
-  maxLng: "19.3905",
-  w: "100",
-  h: "100",
-});
-
-const stipplesData = stipplesResponse.stiples.map((row) =>
-  row.map((obj) => obj.val || 0)
-);
-
-const densityFunction = new DensityFunction2D(stipplesData);
-
-console.log("densityFunction", densityFunction);
-const { stipples, voronoi } = await Stipple.stippleDensityFunction(
-  densityFunction,
-  5,
-  0.0,
-  0.01,
-  bufferHandler
-);
+const densityFunction = new DensityFunctionLinear(20, 20);
+const {stipples, voronoi}  = await Stipple.stippleDensityFunction(densityFunction, 5, 0.0, 0.01);
 console.log("stipples", stipples);
 console.log("voronoi", voronoi);
+bufferHandler.addNewData(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
 
-bufferHandler.addNewData(
-  CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-);
+
+// const stipplesResponse = await fetchStiples("air_pollution", {
+//   minLat: "42.4160",
+//   maxLat: "46.5385",
+//   minLng: "13.4932",
+//   maxLng: "19.3905",
+//   w: "100",
+//   h: "100",
+// });
+
+// const stipplesData = stipplesResponse.stiples.map((row) =>
+//   row.map((obj) => obj.val || 0)
+// );
+//
+// const densityFunction = new DensityFunction2D(stipplesData);
+//
+// console.log("densityFunction", densityFunction);
+// const { stipples, voronoi } = await Stipple.stippleDensityFunction(
+//   densityFunction,
+//   5,
+//   0.0,
+//   0.01,
+//   bufferHandler
+// );
+// console.log("stipples", stipples);
+// console.log("voronoi", voronoi);
+//
+// bufferHandler.addNewData(
+//   CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
+// );
 
 const { vertexData, numVertices } = createCircleVertices(32);
 const vertexBuffer = device.createBuffer({

@@ -65,9 +65,43 @@ export class OrthoCamera {
             this.zoomCamera(z);
         }
 
+        console.log("mapToLatLng", this.mapToLatLng());
+
         this.refreshProjectionMatrix();
         this.refreshViewMatrix();
     }
+    public mapToLatLng() {
+        // Define the bounds for latitude and longitude
+        const minLat = -90;
+        const maxLat = 90;
+        const minLng = -180;
+        const maxLng = 180;
+
+        // Calculate scaling factors
+        const latScale = (this.top - this.bottom) / (maxLat - minLat);
+        const lngScale = (this.right - this.left) / (maxLng - minLng);
+
+        // Map orthographic bounds to latitude/longitude
+        const latMin = this.bottom * latScale + minLat;
+        const latMax = this.top * latScale + minLat;
+        const lngMin = this.left * lngScale + minLng;
+        const lngMax = this.right * lngScale + minLng;
+
+        // return {
+        //     latMin,
+        //     latMax,
+        //     lngMin,
+        //     lngMax,
+        // };
+        return {
+            latMin: this.clamp(latMin, minLat, maxLat),
+            latMax: this.clamp(latMax, minLat, maxLat),
+            lngMin: this.clamp(lngMin, minLng, maxLng),
+            lngMax: this.clamp(lngMax, minLng, maxLng),
+        }
+    }
+
+
 
     // make the orthographic area bigger or smaller
     public zoomCamera(zoom: number): void {

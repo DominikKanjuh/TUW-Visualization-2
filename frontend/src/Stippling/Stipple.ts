@@ -56,7 +56,7 @@ export class Stipple {
         initialStippleRadius: number = 5.0,
         initialErrorThreshold: number = 0.0,
         thresholdConvergenceRate = 0.01,
-        bufferHandler: BufferHandler | null
+        bufferHandler: BufferHandler | null = null
     ) {
         // * Initialize the stipples
         // Find good number of stipples
