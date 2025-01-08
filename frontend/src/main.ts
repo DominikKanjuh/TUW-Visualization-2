@@ -34,6 +34,7 @@ context.configure({
 import shader from './shaders/shader.wgsl';
 import {mat4, vec3} from "webgpu-matrix";
 import Camera from "./camera";
+import {OrthoCamera} from "./ortho_camera";
 
 const shaderModule = device.createShaderModule({
     label: 'circle shader module',
@@ -168,7 +169,8 @@ const renderPassDescriptor = {
 } as GPURenderPassDescriptor;
 
 
-const camera = new Camera(Math.PI / 3, aspect, 1, 10000);
+// const camera = new Camera(Math.PI / 3, aspect, 1, 10000);
+const camera = new OrthoCamera(-aspect, aspect, -1, 1, 1, 10000);
 
 let mouseDown = false;
 canvas.onmousedown = (e) => {
