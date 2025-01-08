@@ -23,13 +23,13 @@ struct Uniform {
     var vsOut: VSOutput;
 
     var aspect = uniform_buffer.screen_size.x / uniform_buffer.screen_size.y;
-    var haha = uniform_buffer.mv_matrix;
+//    var haha = uniform_buffer.mv_matrix;
 
     var pos = vec4f(vert.position * vert.radius + vert.offset, 0.0, 1.0);
     pos = uniform_buffer.mv_matrix * pos;
 
     vsOut.position = pos;
-    vsOut.color = vec4f(vert.density, vert.density, vert.density, 1.0);
+    vsOut.color = vec4f(vert.density, 1.0, 1.0, 1.0);
     return vsOut;
 }
 

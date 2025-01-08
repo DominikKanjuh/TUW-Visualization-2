@@ -1,5 +1,7 @@
-import d3 from "d3";
+import * as d3 from 'd3'
 import {DensityFunction2D} from "./DensityFunction2D";
+import {Circle, CircleHelper} from "./Circle";
+import {BufferHandler} from "./BufferHandler";
 
 export class Stipple {
     x: number;
@@ -39,16 +41,29 @@ export class Stipple {
         return stipples;
     }
 
-    static stipplesToCircles(stipples: Stipple[]) {
-
+    static stipplesToCircles(stipples: Stipple[]): Circle[] {
+        return stipples.map(s => {
+            return {
+                density: s.density,
+                offset: [s.x, s.y],
+                radius: s.radius,
+            } as Circle;
+        });
     }
 
-    static async stippleDensityFunction(densityFunction: DensityFunction2D, initialStippleRadius: number = 5.0, initialErrorThreshold: number = 0.0, thresholdConvergenceRate = 0.01) {
+    static async stippleDensityFunction(
+        densityFunction: DensityFunction2D,
+        initialStippleRadius: number = 5.0,
+        initialErrorThreshold: number = 0.0,
+        thresholdConvergenceRate = 0.01,
+        bufferHandler: BufferHandler | null
+    ) {
         // * Initialize the stipples
         // Find good number of stipples
         const stippleArea = Math.pow(initialStippleRadius, 2) * Math.PI;
         const numOfInitialStipples = Math.round(
             ((densityFunction.width * densityFunction.height) / stippleArea) * 0.7);
+        console.log("numOfInitialStipples", numOfInitialStipples);
 
         let stipples = Stipple.createRandomStipples(numOfInitialStipples, densityFunction.width, densityFunction.height);
 
@@ -102,6 +117,14 @@ export class Stipple {
                     Stipple.createRandomStipples(1, densityFunction.width, densityFunction.height)[0]);
             }
             stipples = nextStipples;
+
+            // * Update the buffer handler if one was passed
+            if (bufferHandler) {
+                bufferHandler.clearBuffer();
+                bufferHandler.addNewData(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
+            }
+
+
             lastVoronoi = voronoi;
             errorThreshold += thresholdConvergenceRate;
         } while (splitOrMerge_happened); // Keep looping until convergence

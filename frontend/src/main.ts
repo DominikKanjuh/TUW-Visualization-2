@@ -37,6 +37,7 @@ import {mat4, vec3} from "webgpu-matrix";
 import {OrthoCamera} from "./ortho_camera";
 import {CircleHelper} from "./Stippling/Circle";
 import {BufferHandler} from "./Stippling/BufferHandler";
+import {DensityFunctionLinear} from "./DensityFunctionLinear";
 
 const shaderModule = device.createShaderModule({
     label: 'circle shader module',
@@ -132,33 +133,16 @@ const bindGroup = device.createBindGroup({
 });
 
 
-// Offsets
-// const kColorOffset = 0;
-// const kOffsetOffset = 1;
-// const kRadiusOffset = 3;
 
-// function random_min_max(min: number = 0, max: number = 1) {
-//     return min + Math.random() * (max - min);
-// }
-//
-// const staticVertexValues = new Float32Array(staticVertexBufferSize / 4);
-// const scalar = Math.pow(10, Math.log10(kNumObjects) - 2);
-// console.log("scalar", scalar, "log", Math.log10(kNumObjects) - 2);
-// for (let i = 0; i < kNumObjects; ++i) {
-//     const staticOffset = i * (staticUnitSize / 4);
-//
-//     // These are only set once so set them now
-//     staticVertexValues.set([random_min_max()], staticOffset + kColorOffset);        // set the density
-//     staticVertexValues.set([random_min_max(-0.9 * scalar, 0.9 * scalar), random_min_max(-0.9 * scalar, 0.9 * scalar)], staticOffset + kOffsetOffset);      // set the offset
-//     const radius = random_min_max(0.2, 0.5);
-//     staticVertexValues.set([radius / aspect], staticOffset + kRadiusOffset);      // set the radius
-// }
-// device.queue.writeBuffer(staticVertexBuffer, 0, staticVertexValues);
 
-// let circleBuffer: Float32Array = CircleHelper.circlesToBuffers(CircleHelper.createRandomCircles(100, 10, 10))
-// console.log(`Writing ${circleBuffer.length} bytes to the GPU. Total buffer size is ${staticVertexBuffer.size} bytes.`);
-// device.queue.writeBuffer(staticVertexBuffer, 0, circleBuffer);
+// * Trying it out with a custom Density Function
+const densityFunction = new DensityFunctionLinear(100, 100);
+console.log("densityFunction", densityFunction);
+const {stipples, voronoi} = await Stipple.stippleDensityFunction(densityFunction, 5, 0.0, 0.01, bufferHandler);
+console.log("stipples", stipples);
+console.log("voronoi", voronoi);
 
+bufferHandler.addNewData(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
 
 const {vertexData, numVertices} = createCircleVertices(32);
 const vertexBuffer = device.createBuffer({
