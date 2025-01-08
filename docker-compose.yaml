@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: nginx:alpine
+    container_name: app_frontend
+    ports:
+      - '3000:80' # Expose frontend on port 3000
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro # Serve static frontend files
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+    container_name: app_backend
+    ports:
+      - '8080:8080' # Expose backend on port 8080
+    environment:
+      PGHOST: db
+      PGUSER: myuser
+      PGPASSWORD: mypassword
+      PGDATABASE: mydb
+      PGPORT: 5432
+    volumes:
+      - ./data:/app/data # Mount the `data/` folder for the backend to access
+    depends_on:
+      - db
+
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: app_postgis
+    ports:
+      - '5432:5432' # Expose PostGIS on default port
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d # Execute all `.sql` files during container startup
+
+volumes:
+  pg_data:
