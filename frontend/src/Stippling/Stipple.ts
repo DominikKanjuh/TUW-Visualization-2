@@ -118,12 +118,10 @@ export class Stipple {
             }
             stipples = nextStipples;
 
-            // * Update the buffer handler if one was passed
-            if (bufferHandler) {
-                bufferHandler.clearBuffer();
-                bufferHandler.addNewData(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
-            }
-
+            // // * Update the buffer handler if one was passed
+            // if (bufferHandler) {
+            //     bufferHandler.exchange_data(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
+            // }
 
             lastVoronoi = voronoi;
             errorThreshold += thresholdConvergenceRate;

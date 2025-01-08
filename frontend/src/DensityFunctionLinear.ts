@@ -8,7 +8,7 @@ export class DensityFunctionLinear extends DensityFunction2D {
     constructor(width: number, height: number) {
         const data = new Array(height).fill(0).map((_, y) => {
             return new Array(width).fill(0).map((_, x) => {
-                return x / width;
+                return x / width * 100;
             });
         });
         super(data);

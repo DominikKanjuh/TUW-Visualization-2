@@ -136,7 +136,7 @@ const bindGroup = device.createBindGroup({
 
 
 // * Trying it out with a custom Density Function
-const densityFunction = new DensityFunctionLinear(100, 100);
+const densityFunction = new DensityFunctionLinear(30, 20);
 console.log("densityFunction", densityFunction);
 const {stipples, voronoi} = await Stipple.stippleDensityFunction(densityFunction, 5, 0.0, 0.01, bufferHandler);
 console.log("stipples", stipples);
@@ -185,6 +185,7 @@ const renderPassDescriptor = {
 
 // const camera = new Camera(Math.PI / 3, aspect, 1, 10000);
 const camera = new OrthoCamera(-aspect, aspect, -1, 1, 1, 10000);
+camera.translateCamera(0, 0, 700);
 
 let mouseDown = false;
 canvas.onmousedown = (e) => {

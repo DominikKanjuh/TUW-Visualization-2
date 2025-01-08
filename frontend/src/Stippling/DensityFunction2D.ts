@@ -38,7 +38,14 @@ export class DensityFunction2D {
      * @param y
      */
     densityAt(x: number, y: number): number {
-        return this.data[y][x];
+        x = Math.floor(x);
+        y = Math.floor(y);
+        try {
+            return this.data[x][y];
+        } catch (e) {
+            console.log(x, y, this.width, this.height);
+            throw e;
+        }
     }
 
     densityInPolygon(polygon: Array<[number, number]>): number {
@@ -51,10 +58,10 @@ export class DensityFunction2D {
         const y_min = Math.min(...y_cords);
         const y_max = Math.max(...y_cords);
 
-        for (let x = x_min; x < x_max; x++) {
-            for (let y = y_min; y < y_max; y++) {
+        for (let x = x_min; x < Math.max(x_max, this.height); x++) {
+            for (let y = y_min; y < Math.max(y_max, this.width); y++) {
                 if (d3.polygonContains(polygon, [x, y])) {
-                    sum += this.data[y][x];
+                    sum += this.densityAt(x, y);
                 }
             }
         }
@@ -62,27 +69,39 @@ export class DensityFunction2D {
         return sum;
     }
 
-    assignDensity(stipples: Stipple[], voronoi: d3.Voronoi<number>) {
-        // 0 out the density of all stipples
-        stipples.forEach(s => s.density = 0);
+    // assignDensity(stipples: Stipple[], voronoi: d3.Voronoi<number>) {
+    //     // 0 out the density of all stipples
+    //     stipples.forEach(s => s.density = 0);
+    //
+    //     let lastFound = 0;
+    //     let lastFoundRow = Array(this.width);
+    //     for (let y = 0; y < this.height; ++y) {
+    //         for (let x = 0; x < this.width; ++x) {
+    //             if (lastFoundRow[x]) {
+    //                 lastFound = lastFoundRow[x];
+    //             }
+    //             lastFound = voronoi.delaunay.find(x, y, lastFound);
+    //             lastFoundRow[x] = lastFound;
+    //             if (stipples[lastFound] === undefined) {
+    //                 console.log("undefined")
+    //             } else {
+    //                 stipples[lastFound].density += this.densityAt(x, y);
+    //             }
+    //         }
+    //     }
+    //     return stipples;
+    // }
 
-        let lastFound = 0;
-        let lastFoundRow = Array(this.width);
-        for (let y = 0; y < this.height; ++y) {
-            for (let x = 0; x < this.width; ++x) {
-                if (lastFoundRow[x]) {
-                    lastFound = lastFoundRow[x];
-                }
-                lastFound = voronoi.delaunay.find(x, y, lastFound);
-                lastFoundRow[x] = lastFound;
-                if (stipples[lastFound] === undefined) {
-                    console.log("undefined")
-                } else {
-                    stipples[lastFound].density += this.densityAt(x, y);
-                }
+    assignDensity(stipples: Stipple[], voronoi: d3.Voronoi<number>) {
+        for (let i = 0; i < stipples.length; i++) {
+            const s = stipples[i];
+            let cell = d3.polygonHull(voronoi.cellPolygon(i));
+            if (!cell) {
+                console.error("No cell found for stipple", s);
+                cell = [[s.x, s.y]];
             }
+            s.density = this.densityInPolygon(cell);
         }
         return stipples;
     }
-
 }

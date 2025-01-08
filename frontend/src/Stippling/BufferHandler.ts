@@ -11,12 +11,14 @@ export class BufferHandler {
         this.gpuBuffer = gpuBuffer;
         this._totalBufferLength = maxBufferLength;
         this._filledBufferLength = 0;
-        this.propagate_change_func = () => { };
+        this.propagate_change_func = () => {
+        };
     }
 
     public getBufferLength(buffer_num: number): number {
         return this._totalBufferLength;
     }
+
     public addNewData(data: Float32Array): void {
         this._filledBufferLength += data.length;
 
@@ -41,5 +43,14 @@ export class BufferHandler {
 
     public register_change(func: Function) {
         this.propagate_change_func = func;
+    }
+
+    public async exchange_data(data: Float32Array) {
+        this.clearBuffer();
+        this.addNewData(data);
+
+        this.propagate_change_func();
+        // wait for the buffer to be written
+        await this.device.queue.onSubmittedWorkDone();
     }
 }
