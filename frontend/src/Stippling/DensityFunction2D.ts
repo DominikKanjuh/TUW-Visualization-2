@@ -9,7 +9,7 @@ export class DensityFunction2D {
      * @param height The height of the density function.
      */
 
-    // The density function is a 2D array of numbers.
+        // The density function is a 2D array of numbers.
     data: number[][];
     // The width of the density function.
     width: number;
@@ -103,5 +103,91 @@ export class DensityFunction2D {
             s.density = this.densityInPolygon(cell);
         }
         return stipples;
+    }
+
+
+    // Region Mach Banding
+
+    /**
+     * Create a quantisation of the range [0, 1] with num steps.
+     * @param num
+     */
+    static createQuantisation(num: number) {
+        const quantisation = [];
+        for (let i = 0; i < num; i++) {
+            quantisation.push(i / num);
+        }
+        return quantisation;
+    }
+
+    /**
+     * Quantise an array of numbers with a given quantisation.
+     * @param array
+     * @param quantisation
+     */
+    static quantise(array: number[], quantisation: number[]) {
+        return array.map(p => {
+            for (let i = 0; i < quantisation.length; ++i) {
+                if (p < quantisation[i]) {
+                    if (i === 0) {
+                        return 0;
+                    } else {
+                        return quantisation[i - 1];
+                    }
+                }
+            }
+            return 1.0;
+        });
+    }
+
+    public createMachBanding2D(quantisation: number[] = DensityFunction2D.createQuantisation(5), weight = 0.5, blurRadius = 4) {
+        const quantisedData = this.data.map(row => DensityFunction2D.quantise(row, quantisation));
+        const blurSize = Math.pow(blurRadius, 2.0) * Math.PI;
+        const imageData = this.float2DtoImage(quantisedData);
+
+        const offscreenCanvas = new OffscreenCanvas(imageData.width, imageData.height);
+        const blurringContext = offscreenCanvas.getContext('2d')!;
+        blurringContext.putImageData(imageData, 0, 0);
+        blurringContext.filter = `blur(${blurSize}px)`;
+        blurringContext.drawImage(offscreenCanvas, 0, 0);
+        const blurredImage = blurringContext.getImageData(0, 0, imageData.width, imageData.height);
+        const blurredData = this.image2DtoFloat(blurredImage);
+
+
+        const machBanded = [];
+        for (let i = 0; i < imageData.width * imageData.height; ++i) {
+            machBanded.push(Math.min(1, Math.max(0, weight * blurredData[i] + (1 - weight) * quantisedData.flat()[i], 0, 1)));
+        }
+
+        // turn it back into 2d array
+        const machBanded2D = [];
+        for (let i = 0; i < imageData.height; i++) {
+            machBanded2D.push(machBanded.slice(i * imageData.width, (i + 1) * imageData.width));
+        }
+
+        return new DensityFunction2D(machBanded2D);
+    }
+
+    /**
+     * Create image from 2D float array.
+     */
+    public float2DtoImage(data: number[][]) {
+        return new ImageData(
+            new Uint8ClampedArray(data.flat().map(v => v * 255)),
+            data.length,
+            data[0].length
+        )
+    }
+
+    /**
+     * Create a 2D array from an image.
+     */
+    public image2DtoFloat(imageData: ImageData) {
+        const data = imageData.data;
+        const floatData = [];
+        for (let i = 0; i < data.length; i += 4) {
+            floatData.push(data[i] / 255);
+        }
+        return floatData;
     }
 }

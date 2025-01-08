@@ -173,7 +173,6 @@ export class Stipple {
             ]
         };
     }
-
 }
 
 export class Stippling {
