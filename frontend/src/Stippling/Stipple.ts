@@ -26,6 +26,11 @@ export class Stipple {
         }
         return stipples;
     }
+
+    static stipplesToCircles(stipples: Stipple[]) {
+
+    }
+
 }
 
 export class Stippling {

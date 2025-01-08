@@ -1,3 +1,5 @@
+import {Stipple} from "./Stippling/Stipple";
+
 export class Util {
     static createPipelineDescriptor_pos4_uv2(device: GPUDevice, shader_module: GPUShaderModule, vs_entry_point: string, fs_entry_point: string, format: GPUTextureFormat): GPURenderPipelineDescriptor {
         return {
@@ -40,4 +42,5 @@ export class Util {
         }
         return [min, max];
     }
+
 }
