@@ -75,7 +75,7 @@ const validateQueryParams = (
   return { isValid: true, params: numParams };
 };
 
-router.get("/stiples", async (req: Request, res: Response) => {
+router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
   try {
     const validation = validateQueryParams(req.query as Partial<QueryParams>);
     if (!validation.isValid) {
@@ -136,9 +136,9 @@ router.get("/stiples", async (req: Request, res: Response) => {
 
       if (gridW < w && gridH < h) {
         stiples[gridW][gridH] = {
-          lat: Number.parseFloat(row.lat),
-          lng: Number.parseFloat(row.lng),
-          val: Number.parseFloat(row.val),
+          lat: Number.parseFloat(Number(row.lat).toFixed(4)),
+          lng: Number.parseFloat(Number(row.lng).toFixed(4)),
+          val: Number.parseFloat(Number(row.val).toFixed(4)),
         };
       }
     });

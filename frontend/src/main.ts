@@ -37,6 +37,8 @@ import { OrthoCamera } from "./ortho_camera";
 import { CircleHelper } from "./Stippling/Circle";
 import { BufferHandler } from "./Stippling/BufferHandler";
 import { DensityFunctionLinear } from "./DensityFunctionLinear";
+import { fetchStiples } from "./api/repository";
+import { DensityFunction2D } from "./Stippling/DensityFunction2D";
 
 const shaderModule = device.createShaderModule({
   label: "circle shader module",
@@ -137,7 +139,21 @@ const bindGroup = device.createBindGroup({
 });
 
 // * Trying it out with a custom Density Function
-const densityFunction = new DensityFunctionLinear(30, 20);
+const stipplesResponse = await fetchStiples("air_pollution", {
+  minLat: "42.4160",
+  maxLat: "46.5385",
+  minLng: "13.4932",
+  maxLng: "19.3905",
+  w: "100",
+  h: "100",
+});
+
+const stipplesData = stipplesResponse.stiples.map((row) =>
+  row.map((obj) => obj.val || 0)
+);
+
+const densityFunction = new DensityFunction2D(stipplesData);
+
 console.log("densityFunction", densityFunction);
 const { stipples, voronoi } = await Stipple.stippleDensityFunction(
   densityFunction,
