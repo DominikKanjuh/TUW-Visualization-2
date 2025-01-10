@@ -32,26 +32,25 @@
     <label for="fidelity_scale">Select the fidelity of the dataset</label>
     <br>
     <div id="fidelity">
-        <input type="number" name="scale" id="fidelity_scale" value="100" onchange="{
-            document.getElementById('fidelity_x').value = document.getElementById('fidelity_scale').value * 3;
-            document.getElementById('fidelity_y').value = document.getElementById('fidelity_scale').value * 4;
-        }">
+        <input type="number" name="scale" id="fidelity_scale" value="100" />
     </div>
     <br>
-<!--    Shows resulting fidelity eq: scale = 1 => 4:3;   scale = 100 => 400:300-->
-    <p>Resulting fidelity is: </p><input id="fidelity_x" type="number" disabled />:<input id="fidelity_y" type="number" disabled />
+    <!--    Shows resulting fidelity eq: scale = 1 => 4:3;   scale = 100 => 400:300-->
+    <p>Resulting fidelity is: </p><input id="fidelity_x" type="number" disabled/>:<input id="fidelity_y" type="number"
+                                                                                         disabled/>
     <br>
-    <label for="max-iterations">Max iterations: </label><input type="number" name="max-iterations" id="max-iterations"/>
+    <label for="max_iterations">Max iterations: </label><input type="number" name="max_iterations" id="max_iterations"
+                                                               value="1000"/>
 
     <button type="submit" id="btn-addData">Compute DATA</button>
 
 
     <div id="stipple-debug"></div>
     <div id="progress" style="background: grey">
-        <div id="progress-bar" style="background: green"> progress </div>
+        <div id="progress-bar" style="background: green"> progress</div>
     </div>
 </div>
 
-<script src="dist/bundle.js"></script>
+<script src="dist/main.bundle.js" defer></script>
 </body>
 </html>

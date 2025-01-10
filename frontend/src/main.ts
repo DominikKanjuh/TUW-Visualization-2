@@ -382,8 +382,20 @@ const options = [
 
 const dataset_dropdown = document.getElementById("dataset_dropdown") as HTMLSelectElement;
 const calc_btn = document.getElementById("btn-addData") as HTMLButtonElement;
+
+const fidelity_scale = document.getElementById("fidelity_scale") as HTMLInputElement;
 const fidelity_x = document.getElementById("fidelity_x") as HTMLInputElement;
 const fidelity_y = document.getElementById("fidelity_y") as HTMLInputElement;
+
+fidelity_scale.onchange = onFidelityScaleChange;
+onFidelityScaleChange();
+function onFidelityScaleChange() {
+    fidelity_x.value = String(parseInt(fidelity_scale.value) * 4);
+    fidelity_y.value = String(parseInt(fidelity_scale.value) * 3);
+}
+
+const max_iterations = document.getElementById("max_iterations") as HTMLInputElement;
+
 calc_btn.onclick = async (e) => {
     e.preventDefault();
 
@@ -391,6 +403,9 @@ calc_btn.onclick = async (e) => {
     const x = parseInt(fidelity_x.value);
     const y = parseInt(fidelity_y.value);
     console.log(`x: ${x}, y: ${y}`);
+
+    const max_iter = parseInt(max_iterations.value);
+    console.log(`max_iter: ${max_iter}`);
 
     switch (dataset_dropdown.value) {
         case "linear":
@@ -410,12 +425,12 @@ calc_btn.onclick = async (e) => {
             break;
     }
 
-
-    const {stipples, voronoi} = await Stipple.stippleDensityFunction(
+    const {stipples, voronoi} = await Stipple.stippleDensityFunctionWithWorker(
         densityFunction,
         5,
         0.0,
-        0.01
+        0.01,
+        max_iter
     );
     console.log("stipples", stipples);
     console.log("voronoi", voronoi);

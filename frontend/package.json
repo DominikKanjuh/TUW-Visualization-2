@@ -6,7 +6,7 @@
     "start": "npm i && npm run build && npm run serve",
     "serve": "http-server -p 9090 -c-1",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js --stats-children"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +30,7 @@
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
-    "@types/dat.gui": "^0.7.13"
+    "@types/dat.gui": "^0.7.13",
+    "worker-loader": "^3.0.8"
   }
 }

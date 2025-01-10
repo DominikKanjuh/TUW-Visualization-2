@@ -4,6 +4,9 @@ import {Circle, CircleHelper} from "./Circle";
 import {BufferHandler} from "./BufferHandler";
 import {ProgressBar} from "../ProgressBar";
 import {Voronoi} from "d3";
+import StippleWorker from 'worker-loader!./stippleWorker.worker.ts';
+import {FromWorkerMessage} from "./WorkerTypes";
+
 
 export class Stipple {
     x: number;
@@ -65,29 +68,34 @@ export class Stipple {
         initialStippleRadius: number = 2.0,
         initialErrorThreshold: number = 0.0,
         thresholdConvergenceRate = 0.01,
+        max_iter: number = 100,
         bufferHandler: BufferHandler | null = null
     ): Promise<{ stipples: Stipple[], voronoi: Voronoi<number> }> {
-        const worker = new Worker(new URL('./stippleWorker.ts', import.meta.url), {type: 'module'});
+        // const worker = new Worker(new URL('./stippleWorker.worker.ts', import.meta.url), {type: 'module'});
+        // const worker = new StippleWorker();
+        const worker = new Worker(new URL('./stippleWorker.worker', import.meta.url));
 
         worker.postMessage({
-            densityFunction,
-            initialStippleRadius,
-            initialErrorThreshold,
-            thresholdConvergenceRate,
-            bufferHandler
+            densityFunction: densityFunction,
+            initialStippleRadius: initialStippleRadius,
+            initialErrorThreshold: initialErrorThreshold,
+            thresholdConvergenceRate: thresholdConvergenceRate,
+            maxIterations: max_iter
         });
 
         return new Promise((resolve, reject) => {
-            worker.onmessage = (e) => {
+            worker.onmessage = (e: any) => {
                 const data = e.data;
-                console.log("Worker message", data);
-                const {progress, done, iteration, stipples, voronoi} = data;
+                // console.log("Worker message", data);
+                const {progress, done, iteration, stipples, voronoi} = data as FromWorkerMessage;
 
                 if (done) {
                     console.log("Stippling done", data);
+                    Stipple.progressBar.setProgress(100);
                     worker.terminate();
                     resolve({stipples, voronoi});
                 } else {
+                    // console.log("Stippling progress", progress);
                     Stipple.progressBar.setProgress(progress);
                     this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
                     if (bufferHandler) {
@@ -176,10 +184,10 @@ export class Stipple {
             }
             stipples = nextStipples;
 
-            this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
+            // this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
             console.log(`Iteration: ${iteration}, Stipples: ${stipples.length}`);
 
-            Stipple.progressBar.setProgress(iteration / Stipple.maxIterations * 100);
+            // Stipple.progressBar.setProgress(iteration / Stipple.maxIterations * 100);
 
             // // * Update the buffer handler if one was passed
             // if (bufferHandler) {
