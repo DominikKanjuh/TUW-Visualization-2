@@ -53,4 +53,9 @@ export class BufferHandler {
         // wait for the buffer to be written
         await this.device.queue.onSubmittedWorkDone();
     }
+
+    replaceData(data: Float32Array) {
+        this.clearBuffer();
+        this.addNewData(data);
+    }
 }

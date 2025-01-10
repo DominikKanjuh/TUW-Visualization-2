@@ -2,6 +2,8 @@ import * as d3 from 'd3'
 import {DensityFunction2D} from "./DensityFunction2D";
 import {Circle, CircleHelper} from "./Circle";
 import {BufferHandler} from "./BufferHandler";
+import {ProgressBar} from "../ProgressBar";
+import {Voronoi} from "d3";
 
 export class Stipple {
     x: number;
@@ -14,6 +16,11 @@ export class Stipple {
     radius: number;
 
     static stippleDebugDiv = document.getElementById("stipple-debug") as HTMLDivElement;
+
+    static progress_bar = document.getElementById("progress-bar") as HTMLDivElement;
+    static progressBar = new ProgressBar(Stipple.progress_bar);
+
+    static maxIterations = 100;
 
     constructor(x: number, y: number, density: number = 0.5, radius: number = 0.5) {
         this.x = x;
@@ -50,6 +57,44 @@ export class Stipple {
                 offset: [s.x, s.y],
                 radius: s.radius,
             } as Circle;
+        });
+    }
+
+    static async stippleDensityFunctionWithWorker(
+        densityFunction: DensityFunction2D,
+        initialStippleRadius: number = 2.0,
+        initialErrorThreshold: number = 0.0,
+        thresholdConvergenceRate = 0.01,
+        bufferHandler: BufferHandler | null = null
+    ): Promise<{ stipples: Stipple[], voronoi: Voronoi<number> }> {
+        const worker = new Worker(new URL('./stippleWorker.ts', import.meta.url), {type: 'module'});
+
+        worker.postMessage({
+            densityFunction,
+            initialStippleRadius,
+            initialErrorThreshold,
+            thresholdConvergenceRate,
+            bufferHandler
+        });
+
+        return new Promise((resolve, reject) => {
+            worker.onmessage = (e) => {
+                const data = e.data;
+                console.log("Worker message", data);
+                const {progress, done, iteration, stipples, voronoi} = data;
+
+                if (done) {
+                    console.log("Stippling done", data);
+                    worker.terminate();
+                    resolve({stipples, voronoi});
+                } else {
+                    Stipple.progressBar.setProgress(progress);
+                    this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
+                    if (bufferHandler) {
+                        bufferHandler.exchange_data(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
+                    }
+                }
+            };
         });
     }
 
@@ -134,6 +179,8 @@ export class Stipple {
             this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
             console.log(`Iteration: ${iteration}, Stipples: ${stipples.length}`);
 
+            Stipple.progressBar.setProgress(iteration / Stipple.maxIterations * 100);
+
             // // * Update the buffer handler if one was passed
             // if (bufferHandler) {
             //     bufferHandler.exchange_data(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
@@ -142,8 +189,7 @@ export class Stipple {
             lastVoronoi = voronoi;
             errorThreshold += thresholdConvergenceRate;
             iteration++;
-        } while (splitOrMerge_happened && iteration < 100); // Keep looping until convergence
-        // && (stipples.length > 500 && iteration < 2000)
+        } while (splitOrMerge_happened && iteration < Stipple.maxIterations); // Keep looping until convergence or max iterations
 
         // * Return the final stipples
         // map output to the range [0, 1]

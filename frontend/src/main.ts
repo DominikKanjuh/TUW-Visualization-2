@@ -1,4 +1,3 @@
-import {generateBuffers} from "./generateBuffers";
 import {Stipple} from "./Stippling/Stipple";
 import * as dat from "dat.gui";
 
@@ -40,6 +39,7 @@ import {DensityFunctionLinear} from "./Stippling/DensityFunctionLinear";
 import {fetchStiples} from "./api/repository";
 import {DensityFunction2D} from "./Stippling/DensityFunction2D";
 import {DensityFunction2DRastrigrinFunction} from "./Stippling/DensityFunction2DRastrigrinFunction";
+import {ProgressBar} from "./ProgressBar";
 
 const shaderModule = device.createShaderModule({
     label: "circle shader module",
@@ -192,29 +192,6 @@ bufferHandler.addNewData(
     CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
 );
 */
-// * Trying it out with a custom Density Function
-const densityFunction = new DensityFunction2DRastrigrinFunction(100, 100);
-console.log(densityFunction.data);
-// const {stipples, voronoi} = await Stipple.stippleDensityFunction(
-//     densityFunction,
-//     5,
-//     0.0,
-//     0.01
-// );
-// console.log("stipples", stipples);
-// bufferHandler.addNewData(
-//     CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-// );
-
-Stipple.stippleDensityFunction(densityFunction, 5, 0.0, 0.01).then(
-    ({stipples, voronoi}) => {
-        console.log("stipples", stipples);
-        console.log("voronoi", voronoi);
-        bufferHandler.addNewData(
-            CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-        );
-    }
-)
 
 const {vertexData, numVertices} = createCircleVertices(32);
 const vertexBuffer = device.createBuffer({
@@ -395,3 +372,72 @@ function createCircleVertices(numSegments = 32) {
         numVertices,
     };
 }
+
+const options = [
+    "linear",
+    "rastrigrin",
+    "rosenbrock",
+    "air_pollution",
+];
+
+const dataset_dropdown = document.getElementById("dataset_dropdown") as HTMLSelectElement;
+const calc_btn = document.getElementById("btn-addData") as HTMLButtonElement;
+const fidelity_x = document.getElementById("fidelity_x") as HTMLInputElement;
+const fidelity_y = document.getElementById("fidelity_y") as HTMLInputElement;
+calc_btn.onclick = async (e) => {
+    e.preventDefault();
+
+    let densityFunction: DensityFunction2D;
+    const x = parseInt(fidelity_x.value);
+    const y = parseInt(fidelity_y.value);
+    console.log(`x: ${x}, y: ${y}`);
+
+    switch (dataset_dropdown.value) {
+        case "linear":
+            densityFunction = new DensityFunctionLinear(x, y);
+            break;
+        case "rastrigrin":
+            densityFunction = new DensityFunction2DRastrigrinFunction(x, y);
+            break;
+        case "rosenbrock":
+            densityFunction = new DensityFunction2DRastrigrinFunction(x, y);
+            break;
+        case "air_pollution":
+            throw Error("Not implemented yet");
+            break;
+        default:
+            densityFunction = new DensityFunctionLinear(x, y);
+            break;
+    }
+
+
+    const {stipples, voronoi} = await Stipple.stippleDensityFunction(
+        densityFunction,
+        5,
+        0.0,
+        0.01
+    );
+    console.log("stipples", stipples);
+    console.log("voronoi", voronoi);
+    // bufferHandler.clearBuffer();
+    // bufferHandler.addNewData(
+    //     CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
+    // );
+    bufferHandler.replaceData(
+        CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
+    );
+}
+
+// // * Trying it out with a custom Density Function
+// const densityFunction = new DensityFunction2DRastrigrinFunction(100, 100);
+// console.log(densityFunction.data);
+//
+// Stipple.stippleDensityFunction(densityFunction, 5, 0.0, 0.01).then(
+//     ({stipples, voronoi}) => {
+//         console.log("stipples", stipples);
+//         console.log("voronoi", voronoi);
+//         bufferHandler.addNewData(
+//             CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
+//         );
+//     }
+// )
