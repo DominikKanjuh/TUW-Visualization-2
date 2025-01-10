@@ -1,4 +1,4 @@
-import {DensityFunction2D} from "./Stippling/DensityFunction2D";
+import {DensityFunction2D} from "./DensityFunction2D";
 
 /**
  * A linear density function going from 0 to 1 from left to right.

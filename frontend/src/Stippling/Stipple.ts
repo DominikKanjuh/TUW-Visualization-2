@@ -13,6 +13,8 @@ export class Stipple {
     density: number;
     radius: number;
 
+    static stippleDebugDiv = document.getElementById("stipple-debug") as HTMLDivElement;
+
     constructor(x: number, y: number, density: number = 0.5, radius: number = 0.5) {
         this.x = x;
         this.y = y;
@@ -53,7 +55,7 @@ export class Stipple {
 
     static async stippleDensityFunction(
         densityFunction: DensityFunction2D,
-        initialStippleRadius: number = 5.0,
+        initialStippleRadius: number = 2.0,
         initialErrorThreshold: number = 0.0,
         thresholdConvergenceRate = 0.01,
         bufferHandler: BufferHandler | null = null
@@ -72,6 +74,7 @@ export class Stipple {
         let errorThreshold = initialErrorThreshold;
         let splitOrMerge_happened = false;
 
+        let iteration = 0;
         do {
             splitOrMerge_happened = false;
             // Create a voronoi diagram using the stipples and delaunay triangulation
@@ -90,10 +93,20 @@ export class Stipple {
             // loop over all stipples and check if they need to be split or merged
             for (let i = 0; i < stipples.length; ++i) {
                 const s = stipples[i];
-                let cell = d3.polygonHull(voronoi.cellPolygon(i));
-                if (!cell) {
+                // let cell = d3.polygonHull(voronoi.cellPolygon(i));
+                // if (!cell) {
+                //     console.error("No cell found for stipple", s);
+                //     cell = [[s.x, s.y]];
+                // }
+                const cellPolygon = voronoi.cellPolygon(i)
+                if (!cellPolygon) {
                     console.error("No cell found for stipple", s);
-                    cell = [[s.x, s.y]];
+                }
+                let cell: Array<[number, number]> = [[s.x, s.y]];
+                if (cellPolygon) {
+                    cell = d3.polygonHull(cellPolygon)!;
+                } else {
+                    console.error("No cell found for stipple", s);
                 }
 
                 if (s.density < deleteThreshold) {
@@ -118,6 +131,9 @@ export class Stipple {
             }
             stipples = nextStipples;
 
+            this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
+            console.log(`Iteration: ${iteration}, Stipples: ${stipples.length}`);
+
             // // * Update the buffer handler if one was passed
             // if (bufferHandler) {
             //     bufferHandler.exchange_data(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
@@ -125,7 +141,9 @@ export class Stipple {
 
             lastVoronoi = voronoi;
             errorThreshold += thresholdConvergenceRate;
-        } while (splitOrMerge_happened); // Keep looping until convergence
+            iteration++;
+        } while (splitOrMerge_happened && iteration < 100); // Keep looping until convergence
+        // && (stipples.length > 500 && iteration < 2000)
 
         // * Return the final stipples
         // map output to the range [0, 1]

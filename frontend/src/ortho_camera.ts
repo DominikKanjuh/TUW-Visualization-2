@@ -65,7 +65,7 @@ export class OrthoCamera {
             this.zoomCamera(z);
         }
 
-        console.log("mapToLatLng", this.mapToLatLng());
+        // console.log("mapToLatLng", this.mapToLatLng());
 
         this.refreshProjectionMatrix();
         this.refreshViewMatrix();
@@ -105,7 +105,7 @@ export class OrthoCamera {
 
     // make the orthographic area bigger or smaller
     public zoomCamera(zoom: number): void {
-        console.log("zoom", zoom);
+        // console.log("zoom", zoom);
         // this.projectionMatrix[0] += zoom;
         // this.projectionMatrix[5] += zoom;
         // this.projectionMatrix[10] += zoom;
