@@ -87,12 +87,6 @@ export class OrthoCamera {
         const lngMin = this.left * lngScale + minLng;
         const lngMax = this.right * lngScale + minLng;
 
-        // return {
-        //     latMin,
-        //     latMax,
-        //     lngMin,
-        //     lngMax,
-        // };
         return {
             latMin: this.clamp(latMin, minLat, maxLat),
             latMax: this.clamp(latMax, minLat, maxLat),
@@ -100,8 +94,6 @@ export class OrthoCamera {
             lngMax: this.clamp(lngMax, minLng, maxLng),
         }
     }
-
-
 
     // make the orthographic area bigger or smaller
     public zoomCamera(zoom: number): void {
