@@ -1,4 +1,15 @@
 import { Stipple } from "./Stippling/Stipple";
+import shader from "./shaders/shader.wgsl";
+import { mat4, vec3 } from "webgpu-matrix";
+// import Camera from "./camera";
+import { OrthoCamera } from "./ortho_camera";
+import { CircleHelper } from "./Stippling/Circle";
+import { BufferHandler } from "./Stippling/BufferHandler";
+import { DensityFunctionLinear } from "./Stippling/DensityFunctionLinear";
+
+import { fetchStiples } from "./api/repository";
+import { DensityFunction2D } from "./Stippling/DensityFunction2D";
+import { DensityFunction2DRastrigrinFunction } from "./Stippling/DensityFunction2DRastrigrinFunction";
 import initializeDrawer from "./components/drawer/Drawer";
 import "./styles.css";
 
@@ -27,18 +38,6 @@ context.configure({
   device,
   format,
 });
-
-import shader from "./shaders/shader.wgsl";
-import { mat4, vec3 } from "webgpu-matrix";
-// import Camera from "./camera";
-import { OrthoCamera } from "./ortho_camera";
-import { CircleHelper } from "./Stippling/Circle";
-import { BufferHandler } from "./Stippling/BufferHandler";
-import { DensityFunctionLinear } from "./Stippling/DensityFunctionLinear";
-import { fetchStiples } from "./api/repository";
-import { DensityFunction2D } from "./Stippling/DensityFunction2D";
-import { DensityFunction2DRastrigrinFunction } from "./Stippling/DensityFunction2DRastrigrinFunction";
-import { ProgressBar } from "./ProgressBar";
 
 const shaderModule = device.createShaderModule({
   label: "circle shader module",
@@ -109,7 +108,7 @@ bufferHandler.register_change(() => {
 });
 
 /*
-const button = document.getElementById("btn-addData") as HTMLButtonElement;
+const button = document.getElementById("btn-compute-stiples") as HTMLButtonElement;
 button.onclick = async () => {
   // bufferHandler.addNewData(
   //   CircleHelper.circlesToBuffers(CircleHelper.createRandomCircles(100, 10, 10))
@@ -377,7 +376,9 @@ const options = ["linear", "rastrigrin", "rosenbrock", "air_pollution"];
 const dataset_dropdown = document.getElementById(
   "dataset_dropdown"
 ) as HTMLSelectElement;
-const calc_btn = document.getElementById("btn-addData") as HTMLButtonElement;
+const calc_btn = document.getElementById(
+  "btn-compute-stiples"
+) as HTMLButtonElement;
 
 const fidelity_scale = document.getElementById(
   "fidelity_scale"

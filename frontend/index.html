@@ -12,7 +12,6 @@
   </head>
   <body>
     <div id="container">
-      <h1 id="compatibility_check"></h1>
       <canvas id="gfx-main" width="800" height="600"></canvas>
 
       <div id="debug"></div>
@@ -22,51 +21,60 @@
     <!-- Drawer start -->
     <div id="drawer">
       <h2>Settings</h2>
-      </br>
 
-      <label for="dataset_dropdown">Select a dataset</label>
-      <br />
-      <select name="datasets" id="dataset_dropdown">
-        <option value="linear">Linear Function</option>
-        <option value="rastrigrin">Rastrigrin Function</option>
-        <option value="rosenbrock">Rosenbrock Function</option>
-        <option value="air_pollution">Air pollution</option>
-      </select>
-      <br />
-
-      <label for="fidelity_scale">Select the fidelity of the dataset</label>
-      <br />
-      <div id="fidelity">
-        <input type="number" name="scale" id="fidelity_scale" value="100" />
+      <div>
+        <label for="dataset_dropdown">Select a dataset</label>
+        <select name="datasets" id="dataset_dropdown">
+          <option value="linear">Linear Function</option>
+          <option value="rastrigrin">Rastrigrin Function</option>
+          <option value="rosenbrock">Rosenbrock Function</option>
+          <option value="air_pollution">Air pollution</option>
+        </select>
       </div>
+
+      <br />
+      <div>
+        <label for="fidelity_scale">Select the fidelity of the dataset</label>
+        <div id="fidelity">
+          <input type="number" name="scale" id="fidelity_scale" value="100" />
+        </div>
+      </div>
+
       <br />
       <!--    Shows resulting fidelity eq: scale = 1 => 4:3;   scale = 100 => 400:300-->
       <p>Resulting fidelity is:</p>
-      <div>
-      <input id="fidelity_x" type="number" disabled />:<input
-        id="fidelity_y"
-        type="number"
-        disabled
-      />
-    </div>
-      <br />
-      <label for="max_iterations">Max iterations: </label
-      ><input
-        type="number"
-        name="max_iterations"
-        id="max_iterations"
-        value="1000"
-      />
-
-      <button type="submit" id="btn-addData">Compute DATA</button>
-
-      <div id="stipple-debug"></div>
-      <div id="progress" style="background: grey">
-        <div id="progress-bar" style="background: green">progress</div>
+      <div
+        style="width: 100%; display: flex; align-items: center; height: auto"
+      >
+        <input id="fidelity_x" type="number" disabled />:<input
+          id="fidelity_y"
+          type="number"
+          disabled
+        />
       </div>
 
       <br />
 
+      <div>
+        <label for="max_iterations">Max iterations: </label>
+        <input
+          type="number"
+          name="max_iterations"
+          id="max_iterations"
+          value="1000"
+        />
+      </div>
+
+      <br />
+
+      <button type="submit" id="btn-compute-stiples">Compute Stipples</button>
+
+      <br />
+
+      <div id="stipple-debug" style="padding-top: 20px"></div>
+      <div id="progress" style="background: grey">
+        <div id="progress-bar" style="background: green">progress</div>
+      </div>
     </div>
     <button id="drawer-toggle" class="drawer-toggle" />
     <!-- Drawer end -->

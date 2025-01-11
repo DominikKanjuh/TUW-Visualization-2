@@ -1,4 +1,3 @@
-import initializeDatasetDropdown from "./dataset-dropdown/DatasetDropdown";
 import "./drawer.styles.css";
 
 export default function initializeDrawer(): void {
@@ -17,7 +16,4 @@ export default function initializeDrawer(): void {
 
     drawerToggleButton.textContent = isOpen ? "X" : "Open settings";
   });
-
-  // Initialize components inside the drawer
-  initializeDatasetDropdown();
 }
