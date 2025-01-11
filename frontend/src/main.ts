@@ -1,7 +1,7 @@
 import { Stipple } from "./Stippling/Stipple";
 import shader from "./shaders/shader.wgsl";
 import { mat4, vec3 } from "webgpu-matrix";
-// import Camera from "./camera";
+import L from "leaflet";
 import { OrthoCamera } from "./ortho_camera";
 import { CircleHelper } from "./Stippling/Circle";
 import { BufferHandler } from "./Stippling/BufferHandler";
@@ -11,17 +11,37 @@ import { fetchStiples } from "./api/repository";
 import { DensityFunction2D } from "./Stippling/DensityFunction2D";
 import { DensityFunction2DRastrigrinFunction } from "./Stippling/DensityFunction2DRastrigrinFunction";
 import initializeDrawer from "./components/drawer/Drawer";
+import "leaflet/dist/leaflet.css";
+
 import "./styles.css";
+
+let map: L.Map | null = null;
+
+function initializeMap(): void {
+  const mapContainer = document.getElementById("map");
+
+  if (!mapContainer) {
+    console.error("Map container (#map) not found.");
+    return;
+  }
+
+  map = L.map("map").setView([51.505, -0.09], 13);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+}
 
 // Initialize all the components
 document.addEventListener("DOMContentLoaded", () => {
+  //   initializeSizes();
   initializeDrawer();
+  initializeMap();
 });
 
 const canvas = document.getElementById("gfx-main") as HTMLCanvasElement;
 const debug_div = document.getElementById("debug") as HTMLElement;
 
 let aspect = canvas.width / canvas.height;
+console.log("aspect", canvas.width, canvas.height, aspect);
 
 const adapter = (await navigator.gpu.requestAdapter()) as GPUAdapter;
 if (!adapter) {
@@ -107,49 +127,9 @@ bufferHandler.register_change(() => {
   requestAnimationFrame(generateFrame);
 });
 
-/*
-const button = document.getElementById("btn-compute-stiples") as HTMLButtonElement;
-button.onclick = async () => {
-  // bufferHandler.addNewData(
-  //   CircleHelper.circlesToBuffers(CircleHelper.createRandomCircles(100, 10, 10))
-  // );
-  bufferHandler.clearBuffer();
-  const coords = camera.mapToLatLng();
-
-  const stipplesResponse = await fetchStiples("air_pollution", {
-    minLat: coords.latMin.toString(),
-    maxLat: coords.latMax.toString(),
-    minLng: coords.lngMin.toString(),
-    maxLng: coords.lngMax.toString(),
-    w: "40",
-    h: "40",
-  });
-
-  const latlngdiv = document.getElementById("latlng-div") as HTMLDivElement;
-  latlngdiv.innerText = `minLat: ${coords.latMin}, maxLat: ${coords.latMax}, minLng: ${coords.lngMin}, maxLng: ${coords.lngMax}`;
-
-  const stipplesData = stipplesResponse.stiples.map((row) =>
-    row.map((obj) => obj?.val || 0)
-  );
-
-  const densityFunction = new DensityFunction2D(stipplesData);
-  const { stipples, voronoi } = await Stipple.stippleDensityFunction(
-    densityFunction,
-    5,
-    0.0,
-    0.01
-  );
-
-  bufferHandler.addNewData(
-    CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-  );
-};
-*/
-
 const uniformBufferSize =
   4 * 4 + // screen size vec2 upsized to vec4 by padding
   16 * 4; // mvp mat4
-console.log("uniformBufferSize", uniformBufferSize);
 const uniformBuffer = device.createBuffer({
   label: "uniform buffer",
   size: uniformBufferSize,
@@ -161,35 +141,6 @@ const bindGroup = device.createBindGroup({
   layout: pipeline.getBindGroupLayout(0),
   entries: [{ binding: 0, resource: { buffer: uniformBuffer } }],
 });
-
-/*
-const stipplesResponse = await fetchStiples("air_pollution", {
-    minLat: "42.4160",
-    maxLat: "46.5385",
-    minLng: "13.4932",
-    maxLng: "19.3905",
-    w: "20",
-    h: "10",
-});
-
-const stipplesData = stipplesResponse.stiples.map((row) =>
-    row.map((obj) => obj?.val || 0)
-);
-
-const densityFunction = new DensityFunction2D(stipplesData);
-
-const {stipples, voronoi} = await Stipple.stippleDensityFunction(
-    densityFunction,
-    5,
-    0.0,
-    0.01
-);
-console.log("stipples", stipples);
-console.log("voronoi", voronoi);
-bufferHandler.addNewData(
-    CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-);
-*/
 
 const { vertexData, numVertices } = createCircleVertices(32);
 const vertexBuffer = device.createBuffer({
@@ -376,6 +327,7 @@ const options = ["linear", "rastrigrin", "rosenbrock", "air_pollution"];
 const dataset_dropdown = document.getElementById(
   "dataset_dropdown"
 ) as HTMLSelectElement;
+
 const calc_btn = document.getElementById(
   "btn-compute-stiples"
 ) as HTMLButtonElement;
@@ -396,6 +348,33 @@ function onFidelityScaleChange() {
 const max_iterations = document.getElementById(
   "max_iterations"
 ) as HTMLInputElement;
+
+const fetchStipples = async (
+  type: "air_pollution" | "temperature"
+): Promise<DensityFunction2D> => {
+  if (!map) {
+    throw Error("Map not initialized");
+  }
+
+  const bounds = map.getBounds();
+
+  const stipplesResponse = await fetchStiples(type, {
+    minLat: String(bounds.getSouth()),
+    maxLat: String(bounds.getNorth()),
+    minLng: String(bounds.getWest()),
+    maxLng: String(bounds.getEast()),
+    w: fidelity_x.value,
+    h: fidelity_y.value,
+  });
+
+  const stipplesData = stipplesResponse.stiples.map((row) =>
+    row.map((obj) => obj?.val || 0)
+  );
+
+  const densityFunction = new DensityFunction2D(stipplesData);
+
+  return densityFunction;
+};
 
 calc_btn.onclick = async (e) => {
   e.preventDefault();
@@ -419,7 +398,8 @@ calc_btn.onclick = async (e) => {
       densityFunction = new DensityFunction2DRastrigrinFunction(x, y);
       break;
     case "air_pollution":
-      throw Error("Not implemented yet");
+      densityFunction = await fetchStipples("air_pollution");
+      break;
     default:
       densityFunction = new DensityFunctionLinear(x, y);
       break;
@@ -434,25 +414,8 @@ calc_btn.onclick = async (e) => {
   );
   console.log("stipples", stipples);
   console.log("voronoi", voronoi);
-  // bufferHandler.clearBuffer();
-  // bufferHandler.addNewData(
-  //     CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-  // );
+
   bufferHandler.replaceData(
     CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
   );
 };
-
-// // * Trying it out with a custom Density Function
-// const densityFunction = new DensityFunction2DRastrigrinFunction(100, 100);
-// console.log(densityFunction.data);
-//
-// Stipple.stippleDensityFunction(densityFunction, 5, 0.0, 0.01).then(
-//     ({stipples, voronoi}) => {
-//         console.log("stipples", stipples);
-//         console.log("voronoi", voronoi);
-//         bufferHandler.addNewData(
-//             CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-//         );
-//     }
-// )

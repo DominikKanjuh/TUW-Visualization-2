@@ -57,3 +57,11 @@ textarea {
   width: 100%;
   max-width: 100%;
 }
+
+#main-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 10px;
+  gap: 10px;
+}
