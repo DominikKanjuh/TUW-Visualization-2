@@ -30,6 +30,16 @@ export class DensityFunction2D {
             this.width = data.length;
             this.height = data[0].length;
         }
+
+        // Normalize the data
+        this.normalize();
+    }
+
+    normalize() {
+        const max = Math.max(...this.data.flat());
+        const min = Math.min(...this.data.flat());
+        const range = max - min;
+        this.data = this.data.map(row => row.map(d => (d - min) / range));
     }
 
     /**
@@ -38,34 +48,8 @@ export class DensityFunction2D {
      * @param y
      */
     densityAt(x: number, y: number): number {
-        // x = Math.floor(x);
-        // y = Math.floor(y);
         return this.data[x][y];
     }
-    // Get density value at a specific point
-    // densityAt(x: number, y: number): number {
-    //     x = Math.max(0, Math.min(this.width - 1, x));
-    //     y = Math.max(0, Math.min(this.height - 1, y));
-    //
-    //     Bilinear interpolation for smooth density values
-        // const x0 = Math.floor(x);
-        // const x1 = Math.min(x0 + 1, this.width - 1);
-        // const y0 = Math.floor(y);
-        // const y1 = Math.min(y0 + 1, this.height - 1);
-        //
-        // const dx = x - x0;
-        // const dy = y - y0;
-        //
-        // const q11 = this.data[y0][x0];
-        // const q21 = this.data[y0][x1];
-        // const q12 = this.data[y1][x0];
-        // const q22 = this.data[y1][x1];
-        //
-        // const r1 = q11 * (1 - dx) + q21 * dx;
-        // const r2 = q12 * (1 - dx) + q22 * dx;
-        //
-        // return r1 * (1 - dy) + r2 * dy;
-    // }
 
     densityInPolygon(polygon: Array<[number, number]>): number {
         let sum = 0;
@@ -87,31 +71,6 @@ export class DensityFunction2D {
 
         return sum;
     }
-
-    /*
-    assignDensity(stipples: Stipple[], voronoi: d3.Voronoi<number>) {
-        for (let i = 0; i < stipples.length; i++) {
-            const s = stipples[i];
-            const cellPolygon = voronoi.cellPolygon(i)
-            if (!cellPolygon) {
-                console.error("No cell found for stipple", s);
-            }
-            // let cell = d3.polygonHull(cellPolygon);
-            // if (!cell) {
-            //     console.error("No cell found for stipple", s);
-            //     cell = [[s.x, s.y]];
-            // }
-            let cell: Array<[number, number]> = [[s.x, s.y]];
-            if (cellPolygon) {
-                cell = d3.polygonHull(cellPolygon)!;
-            } else {
-                console.error("No cell found for stipple", s);
-            }
-            s.density = this.densityInPolygon(cell);
-        }
-        return stipples;
-    }
-     */
 
     getBoundingBoxOfPolygon(polygon: Array<[number, number]>): {
         minX: number,
@@ -162,8 +121,6 @@ export class DensityFunction2D {
             // Iterate through the pixels in the Voronoi cell
             for (let y = Math.floor(minY); y <= Math.ceil(maxY); y++) {
                 for (let x = Math.floor(minX); x <= Math.ceil(maxX); x++) {
-            // for (let x = Math.floor(minX); x <= Math.ceil(maxX); x++) {
-            //     for (let y = Math.floor(minY); y <= Math.ceil(maxY); y++) {
                     if (d3.polygonContains(cell, [x, y])) {
                         const density = this.densityAt(x, y);
                         if (isNaN(density)) {
@@ -184,7 +141,6 @@ export class DensityFunction2D {
 
 
     // Region Mach Banding
-
     /**
      * Create a quantisation of the range [0, 1] with num steps.
      * @param num

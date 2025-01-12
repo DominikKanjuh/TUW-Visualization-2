@@ -398,7 +398,7 @@ const show_iterations_input = document.getElementById("show_iterations") as HTML
 
 // Multiplier for stipple size
 const stipple_size_multiplier_range = document.getElementById("stipple_size_multiplier") as HTMLInputElement;
-stipple_size_multiplier_range.onchange = () => requestAnimationFrame(generateFrame);
+stipple_size_multiplier_range.oninput = () => requestAnimationFrame(generateFrame);
 
 // True: Vary point size with density
 const vary_size_with_density_checkbox = document.getElementById("vary_size_with_density") as HTMLInputElement;
