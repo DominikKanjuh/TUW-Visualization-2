@@ -16,12 +16,8 @@ export const fetchStiples = async (
     return getJson<StiplesResponse>(R.temperature, queryParams);
   }
 
-  if (datasetType === "height") {
-    return getJson<StiplesResponse>(R.height, queryParams);
-  }
-
-  if (datasetType === "precipitation") {
-    return getJson<StiplesResponse>(R.precipitation, queryParams);
+  if (datasetType === "earth_relief") {
+    return getJson<StiplesResponse>(R.earthRelief, queryParams);
   }
 
   return getJson<StiplesResponse>(R.airPollution, queryParams);

@@ -17,8 +17,4 @@ export interface StiplesQueryParams {
   h: string;
 }
 
-export type DataSetType =
-  | "air_pollution"
-  | "temperature"
-  | "height"
-  | "precipitation";
+export type DataSetType = "air_pollution" | "temperature" | "earth_relief";

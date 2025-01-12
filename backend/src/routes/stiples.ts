@@ -4,9 +4,11 @@ import {
   QueryParams,
   ValidatedParams,
   ValidationResult,
-  StiplesRow,
-  Stiple,
+  StipplesRow,
+  Stipple,
   PostgresError,
+  DatasetType,
+  DATASET_CONFIGS,
 } from "./interfaces";
 
 const router: Router = express.Router();
@@ -14,7 +16,7 @@ const router: Router = express.Router();
 const validateQueryParams = (
   params: Partial<QueryParams>
 ): ValidationResult => {
-  const { minLat, maxLat, minLng, maxLng, w, h } = params;
+  const { minLat, maxLat, minLng, maxLng, w, h, total_stiples } = params;
 
   if (!minLat || !maxLat || !minLng || !maxLng || !w || !h) {
     return {
@@ -31,6 +33,7 @@ const validateQueryParams = (
     maxLng: Number.parseFloat(maxLng),
     w: Number.parseInt(w),
     h: Number.parseInt(h),
+    total_stiples: total_stiples ? Number.parseInt(total_stiples) : undefined,
   };
 
   // Validate latitude range (-90 to 90)
@@ -60,11 +63,7 @@ const validateQueryParams = (
   }
 
   // Validate width and height dimensions
-  if (
-    numParams.w <= 0 ||
-    numParams.h <= 0 ||
-    numParams.w * numParams.h > 10000
-  ) {
+  if (numParams.w <= 0 || numParams.h <= 0) {
     return {
       isValid: false,
       error:
@@ -75,75 +74,126 @@ const validateQueryParams = (
   return { isValid: true, params: numParams };
 };
 
-router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
-  try {
-    const validation = validateQueryParams(req.query as Partial<QueryParams>);
-    if (!validation.isValid) {
-      return res.status(400).json({ error: validation.error });
+const assignPointsToGrid = (
+  stipples: StipplesRow[],
+  w: number,
+  h: number,
+  minLng: number,
+  maxLng: number,
+  minLat: number,
+  maxLat: number
+): Stipple[][] => {
+  const cellWidth = (maxLng - minLng) / w;
+  const cellHeight = (maxLat - minLat) / h;
+
+  // w x h grid
+  const grid: Stipple[][] = Array.from({ length: h }, () =>
+    Array(w).fill(null)
+  );
+
+  //  assign the closest point to uniform grid cells
+  for (let row = 0; row < h; row++) {
+    for (let col = 0; col < w; col++) {
+      // centar of the current grid cell
+      const cellCenterLng = minLng + col * cellWidth + cellWidth / 2;
+      const cellCenterLat = maxLat - row * cellHeight - cellHeight / 2;
+
+      let closestPoint: Stipple | null = null;
+      let closestDistance = Infinity;
+
+      stipples.forEach((stipple) => {
+        const distance = Math.sqrt(
+          Math.pow(parseFloat(stipple.lng) - cellCenterLng, 2) +
+            Math.pow(parseFloat(stipple.lat) - cellCenterLat, 2)
+        );
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestPoint = {
+            lat: parseFloat(stipple.lat),
+            lng: parseFloat(stipple.lng),
+            val: stipple.val !== null ? parseFloat(stipple.val) : 0, //  null to 0
+          };
+        }
+      });
+
+      if (closestPoint) {
+        grid[row][col] = {
+          //@ts-ignore
+          lat: closestPoint.lat,
+          //@ts-ignore
+          lng: closestPoint.lng,
+          //@ts-ignore
+          val: closestPoint.val,
+        };
+      }
     }
+  }
 
-    const { minLat, maxLat, minLng, maxLng, w, h } = validation.params;
-    const totalPoints = w * h;
+  return grid;
+};
 
-    const query = `
-      WITH bounds AS (
-        SELECT ST_MakeEnvelope($1, $2, $3, $4, 4326) AS geom
-      ),
-      generated_points AS (
-        SELECT (ST_Dump(ST_GeneratePoints(bounds.geom, $5))).geom AS point
-        FROM bounds
-      ),
-      sample_points AS (
-        SELECT
-          ST_X(point) AS lng,
-          ST_Y(point) AS lat,
-          ST_Value(rast, point) AS val,
-          ROW_NUMBER() OVER (
-            ORDER BY
-              ST_Y(point) DESC,  -- Top to bottom (highest latitude first)
-              ST_X(point) ASC    -- Left to right (lowest longitude first)
-          ) as rn
-        FROM
-          generated_points,
-          air_pollution
-        WHERE
-          ST_Intersects(rast, point)
-          AND ST_Value(rast, point) IS NOT NULL
-        LIMIT $5
-      )
-      SELECT lat, lng, val, rn
-      FROM sample_points
-      ORDER BY rn
-    `;
+const getStiplesForDataset = async (
+  dataset: DatasetType,
+  params: ValidatedParams,
+  res: Response
+) => {
+  const { tableName, valueColumn } = DATASET_CONFIGS[dataset];
+  const { minLat, maxLat, minLng, maxLng, w, h, total_stiples } = params;
 
-    const result = await pool.query<StiplesRow & { rn: number }>(query, [
+  const totalPoints = total_stiples || 10_000;
+  const aspectRatio = w / h;
+  const cols = Math.round(Math.sqrt(totalPoints * aspectRatio));
+  const rows = Math.ceil(totalPoints / cols);
+  const total_points_needed = rows * cols;
+
+  const query = `
+    WITH bounds AS (
+      SELECT ST_MakeEnvelope($1, $2, $3, $4, 4326) AS geom
+    ),
+    generated_points AS (
+      SELECT (ST_Dump(ST_GeneratePoints(bounds.geom, $5))).geom AS point
+      FROM bounds
+    ),
+    sample_points AS (
+      SELECT
+        ST_X(point) AS lng,
+        ST_Y(point) AS lat,
+        ST_Value(${valueColumn}, point) AS val
+      FROM
+        generated_points
+      LEFT JOIN
+        ${tableName}
+      ON
+        ST_Intersects(${valueColumn}, point)
+    )
+    SELECT lat, lng, val
+    FROM sample_points
+    ORDER BY lat DESC, lng ASC
+  `;
+
+  try {
+    const result = await pool.query<StipplesRow & { rn: number }>(query, [
       minLng,
       minLat,
       maxLng,
       maxLat,
-      totalPoints,
+      total_points_needed,
     ]);
+    console.log("Raw stipples from the database:", result.rows);
 
-    // Create w arrays (width) with h elements (height) each
-    const stiples: Stiple[][] = Array(w)
-      .fill(null)
-      .map(() => Array(h).fill(null));
+    console.log("Query result length:", result.rows.length);
 
-    result.rows.forEach((row) => {
-      const rn = row.rn - 1; // Convert to 0-based index
-      const gridW = Math.floor(rn / h); // Column (array) index
-      const gridH = rn % h; // Row (element) index
+    const grid = assignPointsToGrid(
+      result.rows,
+      w,
+      h,
+      minLng,
+      maxLng,
+      minLat,
+      maxLat
+    );
 
-      if (gridW < w && gridH < h) {
-        stiples[gridW][gridH] = {
-          lat: Number.parseFloat(Number(row.lat).toFixed(4)),
-          lng: Number.parseFloat(Number(row.lng).toFixed(4)),
-          val: Number.parseFloat(Number(row.val).toFixed(4)),
-        };
-      }
-    });
-
-    res.json({ stiples });
+    res.json({ stiples: grid });
   } catch (error) {
     console.error("Error in /stiples endpoint:", error);
 
@@ -167,6 +217,30 @@ router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
       message: "An error occurred while processing your request.",
     });
   }
+};
+
+router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
+  const validation = validateQueryParams(req.query as Partial<QueryParams>);
+  if (!validation.isValid) {
+    return res.status(400).json({ error: validation.error });
+  }
+  await getStiplesForDataset("air_pollution", validation.params, res);
+});
+
+router.get("/stiples/temperature", async (req: Request, res: Response) => {
+  const validation = validateQueryParams(req.query as Partial<QueryParams>);
+  if (!validation.isValid) {
+    return res.status(400).json({ error: validation.error });
+  }
+  await getStiplesForDataset("temperature", validation.params, res);
+});
+
+router.get("/stiples/earth_relief", async (req: Request, res: Response) => {
+  const validation = validateQueryParams(req.query as Partial<QueryParams>);
+  if (!validation.isValid) {
+    return res.status(400).json({ error: validation.error });
+  }
+  await getStiplesForDataset("earth_relief", validation.params, res);
 });
 
 router.get("/stiples/health", async (_req: Request, res: Response) => {

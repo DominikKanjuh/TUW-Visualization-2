@@ -4,3 +4,5 @@ dist/
 .env
 .idea
 .vscode
+.parcel-cache
+/proba-frontend-*
