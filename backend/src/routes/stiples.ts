@@ -87,7 +87,7 @@ const getStiplesForDataset = async (
   const { minLat, maxLat, minLng, maxLng, w, h, total_stiples } = params;
 
   const totalPoints = total_stiples || 10_000;
-  const aspectRatio = h / w;
+  const aspectRatio = w / h;
   const cols = Math.round(Math.sqrt(totalPoints * aspectRatio));
   const rows = Math.ceil(totalPoints / cols);
   const total_points_needed = rows * cols;
