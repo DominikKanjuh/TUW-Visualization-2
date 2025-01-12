@@ -4,8 +4,8 @@ import {
   QueryParams,
   ValidatedParams,
   ValidationResult,
-  StiplesRow,
-  Stiple,
+  StipplesRow,
+  Stipple,
   PostgresError,
 } from "./interfaces";
 
@@ -14,7 +14,7 @@ const router: Router = express.Router();
 const validateQueryParams = (
   params: Partial<QueryParams>
 ): ValidationResult => {
-  const { minLat, maxLat, minLng, maxLng, w, h } = params;
+  const { minLat, maxLat, minLng, maxLng, w, h, total_stiples } = params;
 
   if (!minLat || !maxLat || !minLng || !maxLng || !w || !h) {
     return {
@@ -31,6 +31,7 @@ const validateQueryParams = (
     maxLng: Number.parseFloat(maxLng),
     w: Number.parseInt(w),
     h: Number.parseInt(h),
+    total_stiples: total_stiples ? Number.parseInt(total_stiples) : undefined,
   };
 
   // Validate latitude range (-90 to 90)
@@ -63,7 +64,7 @@ const validateQueryParams = (
   if (
     numParams.w <= 0 ||
     numParams.h <= 0 ||
-    numParams.w * numParams.h > 10000
+    numParams.w * numParams.h > 10_000
   ) {
     return {
       isValid: false,
@@ -82,63 +83,74 @@ router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
       return res.status(400).json({ error: validation.error });
     }
 
-    const { minLat, maxLat, minLng, maxLng, w, h } = validation.params;
-    const totalPoints = w * h;
+    const { minLat, maxLat, minLng, maxLng, w, h, total_stiples } =
+      validation.params;
+
+    const totalPoints = total_stiples || 10_000;
+    const aspectRatio = h / w;
+    const cols = Math.round(Math.sqrt(totalPoints * aspectRatio));
+    const rows = Math.ceil(totalPoints / cols);
+
+    const total_points_needed = rows * cols;
 
     const query = `
-      WITH bounds AS (
-        SELECT ST_MakeEnvelope($1, $2, $3, $4, 4326) AS geom
-      ),
-      generated_points AS (
-        SELECT (ST_Dump(ST_GeneratePoints(bounds.geom, $5))).geom AS point
-        FROM bounds
-      ),
-      sample_points AS (
-        SELECT
-          ST_X(point) AS lng,
-          ST_Y(point) AS lat,
-          ST_Value(rast, point) AS val,
-          ROW_NUMBER() OVER (
-            ORDER BY
-              ST_Y(point) DESC,  -- Top to bottom (highest latitude first)
-              ST_X(point) ASC    -- Left to right (lowest longitude first)
-          ) as rn
-        FROM
-          generated_points,
-          air_pollution
-        WHERE
-          ST_Intersects(rast, point)
-          AND ST_Value(rast, point) IS NOT NULL
-        LIMIT $5
-      )
-      SELECT lat, lng, val, rn
-      FROM sample_points
-      ORDER BY rn
-    `;
+    WITH bounds AS (
+      SELECT ST_MakeEnvelope($1, $2, $3, $4, 4326) AS geom
+    ),
+    generated_points AS (
+      SELECT (ST_Dump(ST_GeneratePoints(bounds.geom, $5))).geom AS point
+      FROM bounds
+    ),
+    sample_points AS (
+      SELECT
+        ST_X(point) AS lng,
+        ST_Y(point) AS lat,
+        ST_Value(rast, point) AS val
+      FROM
+        generated_points
+      LEFT JOIN
+        air_pollution
+      ON
+        ST_Intersects(rast, point)
+    )
+    SELECT lat, lng, val
+    FROM sample_points
+    ORDER BY lat DESC, lng ASC
+  `;
 
-    const result = await pool.query<StiplesRow & { rn: number }>(query, [
+    const result = await pool.query<StipplesRow & { rn: number }>(query, [
       minLng,
       minLat,
       maxLng,
       maxLat,
-      totalPoints,
+      total_points_needed,
     ]);
 
+    console.log("Query result length:", result.rows.length);
+    const values = result.rows.map((row) => Number(row.val));
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    console.log("Query results range of values:", { minValue, maxValue });
+
     // Create w arrays (width) with h elements (height) each
-    const stiples: Stiple[][] = Array(w)
+    const stiples: Stipple[][] = Array(rows)
       .fill(null)
-      .map(() => Array(h).fill(null));
+      .map(() => Array(cols).fill(null));
 
-    result.rows.forEach((row) => {
-      const rn = row.rn - 1; // Convert to 0-based index
-      const gridW = Math.floor(rn / h); // Column (array) index
-      const gridH = rn % h; // Row (element) index
+    console.log("Stipples size:", rows * cols);
 
-      if (gridW < w && gridH < h) {
-        stiples[gridW][gridH] = {
-          lat: Number.parseFloat(Number(row.lat).toFixed(4)),
-          lng: Number.parseFloat(Number(row.lng).toFixed(4)),
-          val: Number.parseFloat(Number(row.val).toFixed(4)),
+    result.rows.forEach((row, index) => {
+      const rowIdx = Math.floor(index / cols);
+      const colIdx = index % cols;
+
+      if (rowIdx < rows && colIdx < cols) {
+        stiples[rowIdx][colIdx] = {
+          lat: Number(Number.parseFloat(row.lat).toFixed(4)),
+          lng: Number(Number.parseFloat(row.lng).toFixed(4)),
+          val:
+            row.val !== null
+              ? Number(Number.parseFloat(row.val).toFixed(4))
+              : 0,
         };
       }
     });
