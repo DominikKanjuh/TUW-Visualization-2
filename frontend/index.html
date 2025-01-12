@@ -1,69 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
+  <head>
+    <meta charset="UTF-8" />
     <meta
-            name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Test</title>
-</head>
-<body>
-<div id="container">
-    <h1 id="compatibility_check"></h1>
-    <canvas id="gfx-main" width="800" height="600"></canvas>
-
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Vis2</title>
+    <link rel="stylesheet" href="dist/main.css" />
+  </head>
+  <body>
     <div id="debug"></div>
-    <div id="latlng-div"></div>
-</div>
 
-<div id="settings">
-    <label for="dataset_dropdown">Select a dataset</label>
-    <br>
-    <select name="datasets" id="dataset_dropdown">
-        <option value="linear">Linear Function</option>
-        <option value="rastrigrin">Rastrigrin Function</option>
-        <option value="eggholder">Eggholder Function</option>
-        <option value="image">Bring your own image</option>
-        <option value="air_pollution">Air pollution</option>
-    </select>
-    <br>
-
-    <label for="fidelity_scale">Select the fidelity of the dataset</label>
-    <br>
-    <div id="fidelity">
-        <input type="number" name="scale" id="fidelity_scale" value="10" />
-    </div>
-    <!--    Shows resulting fidelity eq: scale = 1 => 4:3;   scale = 100 => 400:300-->
-    <p>Resulting fidelity is: </p><input id="fidelity_x" type="number" disabled/>:<input id="fidelity_y" type="number"
-                                                                                         disabled/>
-    <br>
-    <label for="initial_stipple_size">Stipple Size</label><input type="range" min="1" max="10" step="0.1" value="3" id="initial_stipple_size" />
-    <p id="selected_stipple_size"></p>
-    <br>
-    <label for="max_iterations">Max iterations: </label><input type="number" name="max_iterations" id="max_iterations"
-                                                               value="10000"/>
-    <br>
-    <label for="show_iterations">Show the stipple algorithm working?</label><input type="checkbox" id="show_iterations"
-                                                                                   name="show_iterations" />
-
-    <br>
-    <label for="point_size_change">Change point size with density</label><input type="range" min="0.1" max="1.9" step="0.1" value="1" name="point_size_change" id="point_size_change" />
-
-    <div id="dropZone" style="width: 300px; height: 200px; border: 2px dashed #ccc;">
-        Drag and drop an image here, or click to select a file
+    <div id="main-container">
+      <canvas id="gfx-main" width="482" height="392"></canvas>
+      <div id="map" style="width: 482px; height: 392px"></div>
     </div>
 
-    <button type="submit" id="btn-addData">Compute DATA</button>
+    <!-- Drawer start -->
+    <div id="drawer">
+      <h2>Settings</h2>
 
+      <div>
+        <label for="dataset_dropdown">Select a dataset</label>
+        <select name="datasets" id="dataset_dropdown">
+          <option value="linear">Linear Function</option>
+          <option value="rastrigrin">Rastrigrin Function</option>
+          <option value="rosenbrock">Rosenbrock Function</option>
+          <option value="air_pollution">Air pollution</option>
+        </select>
+      </div>
 
-    <div id="stipple-debug"></div>
-    <div id="progress" style="background: grey">
-        <div id="progress-bar" style="background: green"> progress</div>
+      <br />
+      <div>
+        <label for="fidelity_scale">Select the fidelity of the dataset</label>
+        <div id="fidelity">
+          <input type="number" name="scale" id="fidelity_scale" value="100" />
+        </div>
+      </div>
+
+      <br />
+      <!--    Shows resulting fidelity eq: scale = 1 => 4:3;   scale = 100 => 400:300-->
+      <p>Resulting fidelity is:</p>
+      <div
+        style="width: 100%; display: flex; align-items: center; height: auto"
+      >
+        <input id="fidelity_x" type="number" disabled />:<input
+          id="fidelity_y"
+          type="number"
+          disabled
+        />
+      </div>
+
+      <br />
+
+      <div>
+        <label for="max_iterations">Max iterations: </label>
+        <input
+          type="number"
+          name="max_iterations"
+          id="max_iterations"
+          value="1000"
+        />
+      </div>
+
+      <br />
+
+      <button type="submit" id="btn-compute-stiples">Compute Stipples</button>
+
+      <br />
+
+      <div id="stipple-debug" style="padding-top: 20px"></div>
+      <div id="progress" style="background: grey">
+        <div id="progress-bar" style="background: green">progress</div>
+      </div>
     </div>
-</div>
+    <button id="drawer-toggle" class="drawer-toggle" />
+    <!-- Drawer end -->
 
-<script src="dist/main.bundle.js" defer></script>
-</body>
+    <script src="dist/main.bundle.js" defer></script>
+  </body>
 </html>
