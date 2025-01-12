@@ -405,7 +405,7 @@ const vary_size_with_density_checkbox = document.getElementById("vary_size_with_
 vary_size_with_density_checkbox.onchange = () => requestAnimationFrame(generateFrame);
 
 const fetchStipples = async (
-  type: "air_pollution" | "temperature"
+  type: "air_pollution" | "temperature" | "earth_relief"
 ): Promise<DensityFunction2D> => {
   if (!map) {
     throw Error("Map not initialized");
@@ -456,6 +456,12 @@ calc_btn.onclick = async (e) => {
       break;
     case "air_pollution":
       densityFunction = await fetchStipples("air_pollution");
+      break;
+    case "earth_relief":
+      densityFunction = await fetchStipples("earth_relief");
+      break;
+    case "temperature":
+      densityFunction = await fetchStipples("temperature");
       break;
     default:
       densityFunction = new DensityFunctionLinear(x, y);
