@@ -7,6 +7,8 @@ import {
   StipplesRow,
   Stipple,
   PostgresError,
+  DatasetType,
+  DATASET_CONFIGS,
 } from "./interfaces";
 
 const router: Router = express.Router();
@@ -76,24 +78,21 @@ const validateQueryParams = (
   return { isValid: true, params: numParams };
 };
 
-router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
-  try {
-    const validation = validateQueryParams(req.query as Partial<QueryParams>);
-    if (!validation.isValid) {
-      return res.status(400).json({ error: validation.error });
-    }
+const getStiplesForDataset = async (
+  dataset: DatasetType,
+  params: ValidatedParams,
+  res: Response
+) => {
+  const { tableName, valueColumn } = DATASET_CONFIGS[dataset];
+  const { minLat, maxLat, minLng, maxLng, w, h, total_stiples } = params;
 
-    const { minLat, maxLat, minLng, maxLng, w, h, total_stiples } =
-      validation.params;
+  const totalPoints = total_stiples || 10_000;
+  const aspectRatio = h / w;
+  const cols = Math.round(Math.sqrt(totalPoints * aspectRatio));
+  const rows = Math.ceil(totalPoints / cols);
+  const total_points_needed = rows * cols;
 
-    const totalPoints = total_stiples || 10_000;
-    const aspectRatio = h / w;
-    const cols = Math.round(Math.sqrt(totalPoints * aspectRatio));
-    const rows = Math.ceil(totalPoints / cols);
-
-    const total_points_needed = rows * cols;
-
-    const query = `
+  const query = `
     WITH bounds AS (
       SELECT ST_MakeEnvelope($1, $2, $3, $4, 4326) AS geom
     ),
@@ -105,19 +104,20 @@ router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
       SELECT
         ST_X(point) AS lng,
         ST_Y(point) AS lat,
-        ST_Value(rast, point) AS val
+        ST_Value(${valueColumn}, point) AS val
       FROM
         generated_points
       LEFT JOIN
-        air_pollution
+        ${tableName}
       ON
-        ST_Intersects(rast, point)
+        ST_Intersects(${valueColumn}, point)
     )
     SELECT lat, lng, val
     FROM sample_points
     ORDER BY lat DESC, lng ASC
   `;
 
+  try {
     const result = await pool.query<StipplesRow & { rn: number }>(query, [
       minLng,
       minLat,
@@ -179,6 +179,30 @@ router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
       message: "An error occurred while processing your request.",
     });
   }
+};
+
+router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
+  const validation = validateQueryParams(req.query as Partial<QueryParams>);
+  if (!validation.isValid) {
+    return res.status(400).json({ error: validation.error });
+  }
+  await getStiplesForDataset("air_pollution", validation.params, res);
+});
+
+router.get("/stiples/temperature", async (req: Request, res: Response) => {
+  const validation = validateQueryParams(req.query as Partial<QueryParams>);
+  if (!validation.isValid) {
+    return res.status(400).json({ error: validation.error });
+  }
+  await getStiplesForDataset("temperature", validation.params, res);
+});
+
+router.get("/stiples/earth_relief", async (req: Request, res: Response) => {
+  const validation = validateQueryParams(req.query as Partial<QueryParams>);
+  if (!validation.isValid) {
+    return res.status(400).json({ error: validation.error });
+  }
+  await getStiplesForDataset("earth_relief", validation.params, res);
 });
 
 router.get("/stiples/health", async (_req: Request, res: Response) => {
