@@ -63,11 +63,7 @@ const validateQueryParams = (
   }
 
   // Validate width and height dimensions
-  if (
-    numParams.w <= 0 ||
-    numParams.h <= 0 ||
-    numParams.w * numParams.h > 10_000
-  ) {
+  if (numParams.w <= 0 || numParams.h <= 0) {
     return {
       isValid: false,
       error:
@@ -76,6 +72,64 @@ const validateQueryParams = (
   }
 
   return { isValid: true, params: numParams };
+};
+
+const assignPointsToGrid = (
+  stipples: StipplesRow[],
+  w: number,
+  h: number,
+  minLng: number,
+  maxLng: number,
+  minLat: number,
+  maxLat: number
+): Stipple[][] => {
+  const cellWidth = (maxLng - minLng) / w;
+  const cellHeight = (maxLat - minLat) / h;
+
+  // w x h grid
+  const grid: Stipple[][] = Array.from({ length: h }, () =>
+    Array(w).fill(null)
+  );
+
+  //  assign the closest point to uniform grid cells
+  for (let row = 0; row < h; row++) {
+    for (let col = 0; col < w; col++) {
+      // centar of the current grid cell
+      const cellCenterLng = minLng + col * cellWidth + cellWidth / 2;
+      const cellCenterLat = maxLat - row * cellHeight - cellHeight / 2;
+
+      let closestPoint: Stipple | null = null;
+      let closestDistance = Infinity;
+
+      stipples.forEach((stipple) => {
+        const distance = Math.sqrt(
+          Math.pow(parseFloat(stipple.lng) - cellCenterLng, 2) +
+            Math.pow(parseFloat(stipple.lat) - cellCenterLat, 2)
+        );
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestPoint = {
+            lat: parseFloat(stipple.lat),
+            lng: parseFloat(stipple.lng),
+            val: stipple.val !== null ? parseFloat(stipple.val) : 0, //  null to 0
+          };
+        }
+      });
+
+      if (closestPoint) {
+        grid[row][col] = {
+          //@ts-ignore
+          lat: closestPoint.lat,
+          //@ts-ignore
+          lng: closestPoint.lng,
+          //@ts-ignore
+          val: closestPoint.val,
+        };
+      }
+    }
+  }
+
+  return grid;
 };
 
 const getStiplesForDataset = async (
@@ -125,37 +179,21 @@ const getStiplesForDataset = async (
       maxLat,
       total_points_needed,
     ]);
+    console.log("Raw stipples from the database:", result.rows);
 
     console.log("Query result length:", result.rows.length);
-    const values = result.rows.map((row) => Number(row.val));
-    const minValue = Math.min(...values);
-    const maxValue = Math.max(...values);
-    console.log("Query results range of values:", { minValue, maxValue });
 
-    // Create w arrays (width) with h elements (height) each
-    const stiples: Stipple[][] = Array(rows)
-      .fill(null)
-      .map(() => Array(cols).fill(null));
+    const grid = assignPointsToGrid(
+      result.rows,
+      w,
+      h,
+      minLng,
+      maxLng,
+      minLat,
+      maxLat
+    );
 
-    console.log("Stipples size:", rows * cols);
-
-    result.rows.forEach((row, index) => {
-      const rowIdx = Math.floor(index / cols);
-      const colIdx = index % cols;
-
-      if (rowIdx < rows && colIdx < cols) {
-        stiples[rowIdx][colIdx] = {
-          lat: Number(Number.parseFloat(row.lat).toFixed(4)),
-          lng: Number(Number.parseFloat(row.lng).toFixed(4)),
-          val:
-            row.val !== null
-              ? Number(Number.parseFloat(row.val).toFixed(4))
-              : 0,
-        };
-      }
-    });
-
-    res.json({ stiples });
+    res.json({ stiples: grid });
   } catch (error) {
     console.error("Error in /stiples endpoint:", error);
 
