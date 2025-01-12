@@ -47,8 +47,8 @@ struct Uniform {
     } else {
         pos = vec4f(vert.position * vert.radius * csm * vert.density + vert.offset, 0.0, 1.0);
     }
-    pos = pos.yxzw;
     pos = uniform_buffer.mv_matrix * pos;
+    pos = pos.yxzw;
 
     vsOut.position = pos;
     vsOut.color = vec4f(vert.density, 1.0, 1.0, 1.0);
