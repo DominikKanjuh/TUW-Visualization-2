@@ -54,15 +54,31 @@
       </div>
 
       <br />
+      <div>
+        <label for="initial_stipple_size">Stipple Size</label>
+        <input type="range" min="1" max="10" step="0.1" value="3" id="initial_stipple_size" />
+        <p id="selected_stipple_size"></p>
+      </div>
+
+      <div>
+        <label for="stipple_size_multiplier">Stipple Size multiplier for rendering</label>
+        <input type="range" min="0.1" max="10" step="0.1" value="1" id="stipple_size_multiplier">
+
+        <label for="vary_size_with_density">Vary stipple size with density</label><input type="checkbox" id="vary_size_with_density">
+      </div>
 
       <div>
         <label for="max_iterations">Max iterations: </label>
         <input
-          type="number"
-          name="max_iterations"
-          id="max_iterations"
-          value="1000"
+            type="number"
+            name="max_iterations"
+            id="max_iterations"
+            value="1000"
         />
+        <div>
+          <label for="show_iterations">Show the stipple algorithm working?</label>
+          <input type="checkbox" id="show_iterations" name="show_iterations" />
+        </div>
       </div>
 
       <br />

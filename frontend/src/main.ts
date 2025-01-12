@@ -131,6 +131,7 @@ const uniformBufferSize =
     4 * 4 +     // screen size vec2 upsized to vec4 by padding
     16 * 4 +    // mvp mat4
     4 * 4;      // change with density f32, point size f32 upsize to vec4 by padding
+
 console.log("uniformBufferSize", uniformBufferSize);
 const uniformBuffer = device.createBuffer({
   label: "uniform buffer",
@@ -226,8 +227,8 @@ function updateUniform() {
   // set the mvp matrix
   uniformValues.set(camera.getViewProjectionMatrix(), 4); // size 16
 
-    // set the point size
-    uniformValues.set([parseInt(point_size_change_input.value)], 20); // size 4
+  // set the point size
+  uniformValues.set([parseInt(point_size_change_input.value)], 20); // size 4
 
   device.queue.writeBuffer(uniformBuffer, 0, uniformValues);
 }
@@ -369,7 +370,7 @@ function onStippleSizeChange() {
 const max_iterations = document.getElementById("max_iterations") as HTMLInputElement;
 const show_iterations_input = document.getElementById("show_iterations") as HTMLInputElement;
 
-const point_size_change_input = document.getElementById("point_size_change") as HTMLInputElement;
+const point_size_change_input = document.getElementById("vary_size_with_density") as HTMLInputElement;
 
 const fetchStipples = async (
   type: "air_pollution" | "temperature"

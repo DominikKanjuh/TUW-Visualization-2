@@ -13,7 +13,7 @@ struct VSOutput {
 struct Uniform {
     screen_size: vec4f,
     mv_matrix: mat4x4<f32>,
-    change_stipple_size: f32, // 1.0: no change, (0, 1): change, (1, 2): change
+    change_stipple_size: vec4<f32>, // 1.0: no change, (0, 1): change, (1, 2): change
 };
 
 @group(0) @binding(0) var<uniform> uniform_buffer: Uniform;
