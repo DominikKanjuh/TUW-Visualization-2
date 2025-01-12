@@ -29,8 +29,6 @@ export class DensityFunction2D {
             this.data = data;
             this.width = data.length;
             this.height = data[0].length;
-            // this.width = data[0].length;
-            // this.height = data.length;
         }
     }
 
@@ -42,7 +40,7 @@ export class DensityFunction2D {
     densityAt(x: number, y: number): number {
         // x = Math.floor(x);
         // y = Math.floor(y);
-        return this.data[y][x];
+        return this.data[x][y];
     }
     // Get density value at a specific point
     // densityAt(x: number, y: number): number {
@@ -142,14 +140,16 @@ export class DensityFunction2D {
      */
     assignDensity(stipples: Stipple[], voronoi: Voronoi<Stipple>): Stipple[] {
         return stipples.map((stipple, i) => {
+
             const cell = voronoi.cellPolygon(i);
+
             if (!cell) {
                 stipple.density = 0;
                 return stipple;
             }
 
             let totalDensity = 0;
-            let totalArea = 0;
+            let totalArea = 0.1;
 
             // Calculate bounding box manually
             const xs = cell.map(point => point[0]);
@@ -175,8 +175,8 @@ export class DensityFunction2D {
                 }
             }
 
-            stipple.density = totalArea > 0 ? totalDensity / totalArea : 0;
-            // stipple.density = totalDensity;
+            // stipple.density = totalArea > 0 ? totalDensity / totalArea : 0;
+            stipple.density = totalDensity;
             // console.log(stipple.density, totalDensity, totalArea);
             return stipple;
         });

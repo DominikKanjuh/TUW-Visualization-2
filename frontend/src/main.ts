@@ -130,7 +130,10 @@ bufferHandler.register_change(() => {
 const uniformBufferSize =
     4 * 4 +     // screen size vec2 upsized to vec4 by padding
     16 * 4 +    // mvp mat4
-    4 * 4;      // change with density f32, point size f32 upsize to vec4 by padding
+    4 * 4 +     // change with density f32, point size f32 upsize to vec4 by padding
+    4 * 4 +     // vec4f color 1
+    4 * 4 +     // vec4f color 2
+    4 * 4;      // vec2f stops for blending padded to vec4
 
 console.log("uniformBufferSize", uniformBufferSize);
 const uniformBuffer = device.createBuffer({
@@ -227,10 +230,33 @@ function updateUniform() {
   // set the mvp matrix
   uniformValues.set(camera.getViewProjectionMatrix(), 4); // size 16
 
-  // set the point size
-  uniformValues.set([parseInt(point_size_change_input.value)], 20); // size 4
+  // Do we want to change the point size with density?
+  uniformValues.set([vary_size_with_density_checkbox.checked ? 1.0: 0.0], 20); // size 4
+
+  // Overall point size multiplier
+  uniformValues.set([parseInt(stipple_size_multiplier_range.value)], 21); // size 4
+
+  // * Color
+  // First color (colorPicker1)
+  uniformValues.set(hexcodeToVec4(colorPicker1.value), 22); // size 4
+  // Second color (colorPicker2)
+  uniformValues.set(hexcodeToVec4(colorPicker2.value), 26); // size 4
+  // color stops
+  // TODO: IMPLEMENT
+  uniformValues.set([0.5, 0.5], 30); // size 4
 
   device.queue.writeBuffer(uniformBuffer, 0, uniformValues);
+}
+
+function hexcodeToVec4(hexcode: string): Float32Array {
+    const hex = parseInt(hexcode.slice(1), 16);
+    const r = (hex >> 16) & 255;
+    const g = (hex >> 8) & 255;
+    const b = hex & 255;
+
+    console.log(`hexcodeToVec4: ${hexcode}, ${r/255}, ${g/255}, ${b/255}`);
+
+    return new Float32Array([r / 255, g / 255, b / 255, 1.0]);
 }
 
 function generateFrame() {
@@ -370,7 +396,13 @@ function onStippleSizeChange() {
 const max_iterations = document.getElementById("max_iterations") as HTMLInputElement;
 const show_iterations_input = document.getElementById("show_iterations") as HTMLInputElement;
 
-const point_size_change_input = document.getElementById("vary_size_with_density") as HTMLInputElement;
+// Multiplier for stipple size
+const stipple_size_multiplier_range = document.getElementById("stipple_size_multiplier") as HTMLInputElement;
+stipple_size_multiplier_range.onchange = () => requestAnimationFrame(generateFrame);
+
+// True: Vary point size with density
+const vary_size_with_density_checkbox = document.getElementById("vary_size_with_density") as HTMLInputElement;
+vary_size_with_density_checkbox.onchange = () => requestAnimationFrame(generateFrame);
 
 const fetchStipples = async (
   type: "air_pollution" | "temperature"
@@ -445,3 +477,14 @@ calc_btn.onclick = async (e) => {
         CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
     );
 }
+
+//Acesss the color with colorPickerX.value
+const colorPicker1 = document.getElementById("CP1") as HTMLInputElement
+const colorPicker2 = document.getElementById("CP2") as HTMLInputElement
+
+//Acess the color range with colorPickerXRange.value
+const colorPicker1Range = document.getElementById("CP1_range") as HTMLInputElement
+const colorPicker2Range = document.getElementById("CP2_range") as HTMLInputElement
+
+
+
