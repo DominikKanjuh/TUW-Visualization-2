@@ -111,7 +111,7 @@ export class Stipple {
           // console.log("Stippling progress", progress);
           Stipple.progressBar.setProgress(progress);
           this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
-          if (bufferHandler && stipples.length < 3000) {
+          if (bufferHandler && stipples.length < 6000) {
             bufferHandler.exchange_data(
               CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
             );

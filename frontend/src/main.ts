@@ -230,20 +230,22 @@ function updateUniform() {
   // set the mvp matrix
   uniformValues.set(camera.getViewProjectionMatrix(), 4); // size 16
 
-  // Do we want to change the point size with density?
-  uniformValues.set([vary_size_with_density_checkbox.checked ? 1.0: 0.0], 20); // size 4
+  // Point Size?
+  uniformValues.set([
+      vary_size_with_density_checkbox.checked ? 1.0: 0.0,     // Change with density
+      parseFloat(stipple_size_multiplier_range.value)         // Overall point size multiplier
+  ], 20); // size 4
 
-  // Overall point size multiplier
-  uniformValues.set([parseInt(stipple_size_multiplier_range.value)], 21); // size 4
+  // uniformValues.set([parseFloat(stipple_size_multiplier_range.value)], 21); // size 4
+
 
   // * Color
   // First color (colorPicker1)
-  uniformValues.set(hexcodeToVec4(colorPicker1.value), 22); // size 4
+  uniformValues.set(hexcodeToVec4(colorPicker1.value), 24); // size 4
   // Second color (colorPicker2)
-  uniformValues.set(hexcodeToVec4(colorPicker2.value), 26); // size 4
+  uniformValues.set(hexcodeToVec4(colorPicker2.value), 28); // size 4
   // color stops
-  // TODO: IMPLEMENT
-  uniformValues.set([0.5, 0.5], 30); // size 4
+  uniformValues.set([parseFloat(colorPicker1Range.value), parseFloat(colorPicker2Range.value)], 32); // size 4
 
   device.queue.writeBuffer(uniformBuffer, 0, uniformValues);
 }
@@ -253,8 +255,6 @@ function hexcodeToVec4(hexcode: string): Float32Array {
     const r = (hex >> 16) & 255;
     const g = (hex >> 8) & 255;
     const b = hex & 255;
-
-    console.log(`hexcodeToVec4: ${hexcode}, ${r/255}, ${g/255}, ${b/255}`);
 
     return new Float32Array([r / 255, g / 255, b / 255, 1.0]);
 }
@@ -354,12 +354,6 @@ function createCircleVertices(numSegments = 32) {
   };
 }
 
-const options = [
-    "linear",
-    "rastrigrin",
-    "rosenbrock",
-    "air_pollution",
-];
 
 const dataset_dropdown = document.getElementById(
   "dataset_dropdown"
@@ -441,8 +435,8 @@ calc_btn.onclick = async (e) => {
 
   const max_iter = parseInt(max_iterations.value);
   console.log(`max_iter: ${max_iter}`);
-    const stipple_size = parseInt(initial_stipple_size.value);
-    console.log(`stipple_size: ${stipple_size}`);
+  const stipple_size = parseFloat(initial_stipple_size.value);
+  console.log(`stipple_size: ${stipple_size}`);
 
   switch (dataset_dropdown.value) {
     case "linear":
@@ -480,11 +474,15 @@ calc_btn.onclick = async (e) => {
 
 //Acesss the color with colorPickerX.value
 const colorPicker1 = document.getElementById("CP1") as HTMLInputElement
+colorPicker1.oninput = () => requestAnimationFrame(generateFrame);
 const colorPicker2 = document.getElementById("CP2") as HTMLInputElement
+colorPicker2.oninput = () => requestAnimationFrame(generateFrame);
 
 //Acess the color range with colorPickerXRange.value
 const colorPicker1Range = document.getElementById("CP1_range") as HTMLInputElement
+colorPicker1Range.onchange = () => requestAnimationFrame(generateFrame);
 const colorPicker2Range = document.getElementById("CP2_range") as HTMLInputElement
+colorPicker2Range.onchange = () => requestAnimationFrame(generateFrame);
 
 
 

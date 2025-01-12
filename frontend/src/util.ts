@@ -33,7 +33,7 @@ export class Util {
         } as GPURenderPipelineDescriptor;
     }
 
-    static bounds(numbers: number[]): number[] {
+    static minMaxOfArray(numbers: number[]): number[] {
         let min = Infinity;
         let max = -Infinity;
         for (const n of numbers) {
@@ -45,5 +45,17 @@ export class Util {
 
     static clamp(value: number, min: number, max: number): number {
         return Math.min(max, Math.max(min, value));
+    }
+
+    static minMaxOfArray2D(array: number[][]): {min: number, max: number} {
+        let min = Infinity;
+        let max = -Infinity;
+        for (let i = 0; i < array.length; i++) {
+            for (let j = 0; j < array[i].length; j++) {
+                min = Math.min(min, array[i][j]);
+                max = Math.max(max, array[i][j]);
+            }
+        }
+        return {min, max};
     }
 }

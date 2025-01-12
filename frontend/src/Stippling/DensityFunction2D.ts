@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import {Stipple} from "./Stipple";
 import {Voronoi} from "d3";
+import {Util} from "../util";
 
 /**
  * A 2D density function.
@@ -36,8 +37,7 @@ export class DensityFunction2D {
     }
 
     normalize() {
-        const max = Math.max(...this.data.flat());
-        const min = Math.min(...this.data.flat());
+        const {min, max} = Util.minMaxOfArray2D(this.data);
         const range = max - min;
         this.data = this.data.map(row => row.map(d => (d - min) / range));
     }
