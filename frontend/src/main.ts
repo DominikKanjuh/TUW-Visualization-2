@@ -489,6 +489,3 @@ const colorPicker1Range = document.getElementById("CP1_range") as HTMLInputEleme
 colorPicker1Range.onchange = () => requestAnimationFrame(generateFrame);
 const colorPicker2Range = document.getElementById("CP2_range") as HTMLInputElement
 colorPicker2Range.onchange = () => requestAnimationFrame(generateFrame);
-
-
-
