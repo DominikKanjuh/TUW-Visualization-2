@@ -67,7 +67,7 @@ export class Stipple {
         densityFunction: DensityFunction2D,
         initialStippleRadius: number = 2.0,
         initialErrorThreshold: number = 0.0,
-        thresholdConvergenceRate = 0.01,
+        thresholdConvergenceRate: number = 0.01,
         max_iter: number = 100,
         bufferHandler: BufferHandler | null = null
     ): Promise<{ stipples: Stipple[], voronoi: Voronoi<number> }> {
@@ -98,120 +98,12 @@ export class Stipple {
                     // console.log("Stippling progress", progress);
                     Stipple.progressBar.setProgress(progress);
                     this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
-                    if (bufferHandler) {
+                    if (bufferHandler && stipples.length < 3000) {
                         bufferHandler.exchange_data(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
                     }
                 }
             };
         });
-    }
-
-    static async stippleDensityFunction(
-        densityFunction: DensityFunction2D,
-        initialStippleRadius: number = 2.0,
-        initialErrorThreshold: number = 0.0,
-        thresholdConvergenceRate = 0.01,
-        bufferHandler: BufferHandler | null = null
-    ) {
-        // * Initialize the stipples
-        // Find good number of stipples
-        const stippleArea = Math.pow(initialStippleRadius, 2) * Math.PI;
-        const numOfInitialStipples = Math.round(
-            ((densityFunction.width * densityFunction.height) / stippleArea) * 0.7);
-        console.log("numOfInitialStipples", numOfInitialStipples);
-
-        let stipples = Stipple.createRandomStipples(numOfInitialStipples, densityFunction.width, densityFunction.height);
-
-        // * Loop until convergence
-        let lastVoronoi = null;
-        let errorThreshold = initialErrorThreshold;
-        let splitOrMerge_happened = false;
-
-        let iteration = 0;
-        do {
-            splitOrMerge_happened = false;
-            // Create a voronoi diagram using the stipples and delaunay triangulation
-            const voronoi = d3.Delaunay
-                .from(stipples.map(s => [s.x, s.y]))
-                .voronoi([0, 0, densityFunction.width, densityFunction.height]);
-
-            stipples = densityFunction.assignDensity(stipples, voronoi);
-
-            // * Create new stipples by splitting or merging
-            const nextStipples = [];
-
-            const deleteThreshold = stippleArea - errorThreshold;
-            const splitThreshold = stippleArea + errorThreshold;
-
-            // loop over all stipples and check if they need to be split or merged
-            for (let i = 0; i < stipples.length; ++i) {
-                const s = stipples[i];
-                // let cell = d3.polygonHull(voronoi.cellPolygon(i));
-                // if (!cell) {
-                //     console.error("No cell found for stipple", s);
-                //     cell = [[s.x, s.y]];
-                // }
-                const cellPolygon = voronoi.cellPolygon(i)
-                if (!cellPolygon) {
-                    console.error("No cell found for stipple", s);
-                }
-                let cell: Array<[number, number]> = [[s.x, s.y]];
-                if (cellPolygon) {
-                    cell = d3.polygonHull(cellPolygon)!;
-                } else {
-                    console.error("No cell found for stipple", s);
-                }
-
-                if (s.density < deleteThreshold) {
-                    splitOrMerge_happened = true;
-                } else if (s.density > splitThreshold) {
-                    splitOrMerge_happened = true;
-                    const {cell1, cell2} = Stipple.splitCell(cell);
-
-                    // Update position for the first cell
-                    s.setPosition(cell1[0], cell1[1]);
-                    nextStipples.push(s);
-                    // And create a new stipple for the second cell
-                    nextStipples.push(new Stipple(cell2[0], cell2[1]));
-                } else {
-                    s.setPosition(...d3.polygonCentroid(cell));
-                    nextStipples.push(s);
-                }
-            }
-            if (!nextStipples.length) {
-                nextStipples.push(
-                    Stipple.createRandomStipples(1, densityFunction.width, densityFunction.height)[0]);
-            }
-            stipples = nextStipples;
-
-            // this.stippleDebugDiv.innerText = `Iteration: ${iteration}, Stipples: ${stipples.length}`;
-            console.log(`Iteration: ${iteration}, Stipples: ${stipples.length}`);
-
-            // Stipple.progressBar.setProgress(iteration / Stipple.maxIterations * 100);
-
-            // // * Update the buffer handler if one was passed
-            // if (bufferHandler) {
-            //     bufferHandler.exchange_data(CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples)));
-            // }
-
-            lastVoronoi = voronoi;
-            errorThreshold += thresholdConvergenceRate;
-            iteration++;
-        } while (splitOrMerge_happened && iteration < Stipple.maxIterations); // Keep looping until convergence or max iterations
-
-        // * Return the final stipples
-        // map output to the range [0, 1]
-        const maxDensity = Math.max(...stipples.map(s => s.density));
-        const minDensity = Math.min(...stipples.map(s => s.density));
-        stipples.forEach(s => {
-            s.density = (s.density - minDensity) / (maxDensity - minDensity);
-
-            // set relative position for easier drawing
-            s.relativeX = s.x / densityFunction.width;
-            s.relativeY = s.y / densityFunction.height;
-        });
-
-        return {stipples, voronoi: lastVoronoi};
     }
 
     static splitCell(cell: Array<[number, number]>) {

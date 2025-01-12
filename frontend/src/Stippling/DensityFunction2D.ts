@@ -1,15 +1,15 @@
 import * as d3 from 'd3'
 import {Stipple} from "./Stipple";
+import {Voronoi} from "d3";
 
+/**
+ * A 2D density function.
+ * @param data A 2D array of numbers.
+ * @param width The width of the density function.
+ * @param height The height of the density function.
+ */
 export class DensityFunction2D {
-    /**
-     * A 2D density function.
-     * @param data A 2D array of numbers.
-     * @param width The width of the density function.
-     * @param height The height of the density function.
-     */
-
-        // The density function is a 2D array of numbers.
+    // The density function is a 2D array of numbers.
     data: number[][];
     // The width of the density function.
     width: number;
@@ -29,6 +29,8 @@ export class DensityFunction2D {
             this.data = data;
             this.width = data.length;
             this.height = data[0].length;
+            // this.width = data[0].length;
+            // this.height = data.length;
         }
     }
 
@@ -38,15 +40,34 @@ export class DensityFunction2D {
      * @param y
      */
     densityAt(x: number, y: number): number {
-        x = Math.floor(x);
-        y = Math.floor(y);
-        try {
-            return this.data[x][y];
-        } catch (e) {
-            console.log(x, y, this.width, this.height);
-            throw e;
-        }
+        // x = Math.floor(x);
+        // y = Math.floor(y);
+        return this.data[y][x];
     }
+    // Get density value at a specific point
+    // densityAt(x: number, y: number): number {
+    //     x = Math.max(0, Math.min(this.width - 1, x));
+    //     y = Math.max(0, Math.min(this.height - 1, y));
+    //
+    //     Bilinear interpolation for smooth density values
+        // const x0 = Math.floor(x);
+        // const x1 = Math.min(x0 + 1, this.width - 1);
+        // const y0 = Math.floor(y);
+        // const y1 = Math.min(y0 + 1, this.height - 1);
+        //
+        // const dx = x - x0;
+        // const dy = y - y0;
+        //
+        // const q11 = this.data[y0][x0];
+        // const q21 = this.data[y0][x1];
+        // const q12 = this.data[y1][x0];
+        // const q22 = this.data[y1][x1];
+        //
+        // const r1 = q11 * (1 - dx) + q21 * dx;
+        // const r2 = q12 * (1 - dx) + q22 * dx;
+        //
+        // return r1 * (1 - dy) + r2 * dy;
+    // }
 
     densityInPolygon(polygon: Array<[number, number]>): number {
         let sum = 0;
@@ -69,6 +90,7 @@ export class DensityFunction2D {
         return sum;
     }
 
+    /*
     assignDensity(stipples: Stipple[], voronoi: d3.Voronoi<number>) {
         for (let i = 0; i < stipples.length; i++) {
             const s = stipples[i];
@@ -90,6 +112,74 @@ export class DensityFunction2D {
             s.density = this.densityInPolygon(cell);
         }
         return stipples;
+    }
+     */
+
+    getBoundingBoxOfPolygon(polygon: Array<[number, number]>): {
+        minX: number,
+        maxX: number,
+        minY: number,
+        maxY: number
+    } {
+        let minX = Infinity;
+        let maxX = -Infinity;
+        let minY = Infinity;
+        let maxY = -Infinity;
+        for (let i = 0; i < polygon.length; i++) {
+            const [x, y] = polygon[i];
+            minX = Math.min(minX, x);
+            maxX = Math.max(maxX, x);
+            minY = Math.min(minY, y);
+            maxY = Math.max(maxY, y);
+        }
+        return {minX, maxX, minY, maxY};
+    }
+
+    /**
+     * Assign density to stipples based on the density function and the Voronoi diagram.
+     * @param stipples
+     * @param voronoi
+     */
+    assignDensity(stipples: Stipple[], voronoi: Voronoi<Stipple>): Stipple[] {
+        return stipples.map((stipple, i) => {
+            const cell = voronoi.cellPolygon(i);
+            if (!cell) {
+                stipple.density = 0;
+                return stipple;
+            }
+
+            let totalDensity = 0;
+            let totalArea = 0;
+
+            // Calculate bounding box manually
+            const xs = cell.map(point => point[0]);
+            const ys = cell.map(point => point[1]);
+            const minX = Math.min(...xs);
+            const maxX = Math.max(...xs);
+            const minY = Math.min(...ys);
+            const maxY = Math.max(...ys);
+
+            // Iterate through the pixels in the Voronoi cell
+            for (let y = Math.floor(minY); y <= Math.ceil(maxY); y++) {
+                for (let x = Math.floor(minX); x <= Math.ceil(maxX); x++) {
+            // for (let x = Math.floor(minX); x <= Math.ceil(maxX); x++) {
+            //     for (let y = Math.floor(minY); y <= Math.ceil(maxY); y++) {
+                    if (d3.polygonContains(cell, [x, y])) {
+                        const density = this.densityAt(x, y);
+                        if (isNaN(density)) {
+                            debugger;
+                        }
+                        totalDensity += density;
+                        totalArea += 1;
+                    }
+                }
+            }
+
+            stipple.density = totalArea > 0 ? totalDensity / totalArea : 0;
+            // stipple.density = totalDensity;
+            // console.log(stipple.density, totalDensity, totalArea);
+            return stipple;
+        });
     }
 
 

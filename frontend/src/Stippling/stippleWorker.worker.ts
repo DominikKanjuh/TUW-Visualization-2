@@ -1,6 +1,8 @@
 import {DensityFunction2D} from "./DensityFunction2D";
 import * as d3 from "d3";
 import {FromWorkerMessage, ToWorkerMessage} from "./WorkerTypes";
+import {Voronoi} from "d3";
+import * as worker_threads from "node:worker_threads";
 
 const ctx: Worker = self as any;
 
@@ -18,6 +20,7 @@ ctx.onmessage = async function (event) {
     const workerDensityFunction = new DensityFunction2D(densityFunction.data);
 
     // Call the function with received data
+    // 0.01, 0.1, 0.95
     await stippleDensityFunction(
         workerDensityFunction,
         initialStippleRadius,
@@ -27,13 +30,13 @@ ctx.onmessage = async function (event) {
     );
 };
 
-const stippleDensityFunction = async (
+async function stippleDensityFunction(
     densityFunction: DensityFunction2D,
     initialStippleRadius: number,
     initialErrorThreshold: number,
     thresholdConvergenceRate: number,
     maxIterations: number
-) => {
+): Promise<void> {
     // * Initialize the stipples
     // Find good number of stipples
     const stippleArea = Math.pow(initialStippleRadius, 2) * Math.PI;
@@ -58,47 +61,12 @@ const stippleDensityFunction = async (
 
         stipples = densityFunction.assignDensity(stipples, voronoi) as WorkerStipple[];
 
+        console.log("Density sum of all stipples", stipples.reduce((acc, s) => acc + s.density, 0));
+
         // * Create new stipples by splitting or merging
-        const nextStipples = [];
-
-        const deleteThreshold = stippleArea - errorThreshold;
-        const splitThreshold = stippleArea + errorThreshold;
-
-        // loop over all stipples and check if they need to be split or merged
-        for (let i = 0; i < stipples.length; ++i) {
-            const s = stipples[i];
-            const cellPolygon = voronoi.cellPolygon(i)
-            if (!cellPolygon) {
-                console.error("No cell found for stipple", s);
-            }
-            let cell: Array<[number, number]> = [[s.x, s.y]];
-            if (cellPolygon) {
-                cell = d3.polygonHull(cellPolygon)!;
-            } else {
-                console.error("No cell found for stipple", s);
-            }
-
-            if (s.density < deleteThreshold) {
-                splitOrMerge_happened = true;
-            } else if (s.density > splitThreshold) {
-                splitOrMerge_happened = true;
-                const {cell1, cell2} = splitCell(cell);
-
-                // Update position for the first cell
-                s.setPosition(cell1[0], cell1[1]);
-                nextStipples.push(s);
-                // And create a new stipple for the second cell
-                nextStipples.push(new WorkerStipple(cell2[0], cell2[1]));
-            } else {
-                s.setPosition(...d3.polygonCentroid(cell));
-                nextStipples.push(s);
-            }
-        }
-        // if (!nextStipples.length) {
-        //     nextStipples.push(
-        //         createRandomStipples(1, densityFunction.width, densityFunction.height)[0]);
-        // }
-        stipples = nextStipples;
+        const change = handleStippleChange(stipples, voronoi, stippleArea, errorThreshold);
+        splitOrMerge_happened = change.change;
+        stipples = change.new_stipples;
         lastVoronoi = voronoi;
 
         // * progress update:
@@ -107,6 +75,7 @@ const stippleDensityFunction = async (
             done: false,
             iteration,
             stipples: fillStippleProperties(stipples, densityFunction),
+            // stipples: stipples,
             voronoi: lastVoronoi,
         } as FromWorkerMessage);
 
@@ -114,18 +83,58 @@ const stippleDensityFunction = async (
         iteration++;
     } while (splitOrMerge_happened && iteration < maxIterations);
 
-    // * Return the final stipples
-    stipples = fillStippleProperties(stipples, densityFunction);
+    // stipples = densityFunction.assignDensity(stipples, lastVoronoi) as WorkerStipple[];
 
+    // * Return the final stipples
     // Send final result back to the main thread
     ctx.postMessage({
-        progress: (iteration / maxIterations) * 100,
+        progress: 100,
         done: true,
         iteration,
-        stipples: stipples,
+        stipples: fillStippleProperties(stipples, densityFunction),
+        // stipples: stipples,
         voronoi: lastVoronoi,
     } as FromWorkerMessage);
-};
+}
+
+
+function handleStippleChange(stipples: WorkerStipple[], voronoi: Voronoi<number>, area: number, error: number): {
+    change: boolean,
+    new_stipples: WorkerStipple[]
+} {
+    let new_stipples = [];
+    let change = false;
+
+    const deleteThreshold = area - error;
+    const splitThreshold = area + error;
+
+    for (let i = 0; i < stipples.length; ++i) {
+        const s = stipples[i];
+        const cell = d3.polygonHull(voronoi.cellPolygon(i))!;
+        if (s.density < deleteThreshold) {
+            change = true;
+        } else if (s.density > splitThreshold) {
+            change = true;
+            const {cell1, cell2} = splitCell(cell);
+
+            // Update position for the first cell
+            s.setPosition(cell1[0], cell1[1]);
+            // assert if out of bounds
+            if (cell1[0] < 0 || cell1[0] > 1 || cell1[1] < 0 || cell1[1] > 1) {
+                console.log("Out of bounds", cell1);
+            }
+            new_stipples.push(s);
+            // And create a new stipple for the second cell
+            // assert if out of bounds
+            new_stipples.push(new WorkerStipple(cell2[0], cell2[1]));
+        } else {
+            s.setPosition(...d3.polygonCentroid(cell));
+            new_stipples.push(s);
+        }
+    }
+
+    return {change, new_stipples};
+}
 
 
 /**

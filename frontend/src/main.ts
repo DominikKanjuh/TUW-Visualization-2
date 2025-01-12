@@ -40,6 +40,7 @@ import {fetchStiples} from "./api/repository";
 import {DensityFunction2D} from "./Stippling/DensityFunction2D";
 import {DensityFunction2DRastrigrinFunction} from "./Stippling/DensityFunction2DRastrigrinFunction";
 import {ProgressBar} from "./ProgressBar";
+import {DensityFunction2DEggholder} from "./Stippling/DensityFunction2DEggholder";
 
 const shaderModule = device.createShaderModule({
     label: "circle shader module",
@@ -148,9 +149,11 @@ button.onclick = async () => {
 };
 */
 
+// * Uniform buffer
 const uniformBufferSize =
-    4 * 4 + // screen size vec2 upsized to vec4 by padding
-    16 * 4; // mvp mat4
+    4 * 4 +     // screen size vec2 upsized to vec4 by padding
+    16 * 4 +    // mvp mat4
+    4 * 4;      // point size f32 upsize to vec4 by padding
 console.log("uniformBufferSize", uniformBufferSize);
 const uniformBuffer = device.createBuffer({
     label: "uniform buffer",
@@ -270,10 +273,13 @@ function updateUniform() {
     const uniformValues = new Float32Array(uniformBufferSize / 4);
 
     // set the screen size
-    uniformValues.set([canvas.width, canvas.height], 0);
+    uniformValues.set([canvas.width, canvas.height], 0); // size 4
 
     // set the mvp matrix
-    uniformValues.set(camera.getViewProjectionMatrix(), 4);
+    uniformValues.set(camera.getViewProjectionMatrix(), 4); // size 16
+
+    // set the point size
+    uniformValues.set([parseInt(point_size_change_input.value)], 20); // size 4
 
     device.queue.writeBuffer(uniformBuffer, 0, uniformValues);
 }
@@ -389,12 +395,26 @@ const fidelity_y = document.getElementById("fidelity_y") as HTMLInputElement;
 
 fidelity_scale.onchange = onFidelityScaleChange;
 onFidelityScaleChange();
+
 function onFidelityScaleChange() {
-    fidelity_x.value = String(parseInt(fidelity_scale.value) * 4);
-    fidelity_y.value = String(parseInt(fidelity_scale.value) * 3);
+    fidelity_x.value = String(parseInt(fidelity_scale.value) * 3);
+    fidelity_y.value = String(parseInt(fidelity_scale.value) * 4);
+}
+
+const initial_stipple_size = document.getElementById("initial_stipple_size") as HTMLInputElement;
+const selected_stipple_size_p = document.getElementById("selected_stipple_size") as HTMLParagraphElement;
+
+initial_stipple_size.oninput = onStippleSizeChange;
+onStippleSizeChange()
+
+function onStippleSizeChange() {
+    selected_stipple_size_p.innerText = initial_stipple_size.value;
 }
 
 const max_iterations = document.getElementById("max_iterations") as HTMLInputElement;
+const show_iterations_input = document.getElementById("show_iterations") as HTMLInputElement;
+
+const point_size_change_input = document.getElementById("point_size_change") as HTMLInputElement;
 
 calc_btn.onclick = async (e) => {
     e.preventDefault();
@@ -403,6 +423,9 @@ calc_btn.onclick = async (e) => {
     const x = parseInt(fidelity_x.value);
     const y = parseInt(fidelity_y.value);
     console.log(`x: ${x}, y: ${y}`);
+
+    const stipple_size = parseInt(initial_stipple_size.value);
+    console.log(`stipple_size: ${stipple_size}`);
 
     const max_iter = parseInt(max_iterations.value);
     console.log(`max_iter: ${max_iter}`);
@@ -414,8 +437,8 @@ calc_btn.onclick = async (e) => {
         case "rastrigrin":
             densityFunction = new DensityFunction2DRastrigrinFunction(x, y);
             break;
-        case "rosenbrock":
-            densityFunction = new DensityFunction2DRastrigrinFunction(x, y);
+        case "eggholder":
+            densityFunction = new DensityFunction2DEggholder(x, y);
             break;
         case "air_pollution":
             throw Error("Not implemented yet");
@@ -427,32 +450,16 @@ calc_btn.onclick = async (e) => {
 
     const {stipples, voronoi} = await Stipple.stippleDensityFunctionWithWorker(
         densityFunction,
-        5,
+        stipple_size,
         0.0,
         0.01,
-        max_iter
+        max_iter,
+        show_iterations_input.checked ? bufferHandler : null,
     );
     console.log("stipples", stipples);
     console.log("voronoi", voronoi);
-    // bufferHandler.clearBuffer();
-    // bufferHandler.addNewData(
-    //     CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-    // );
+
     bufferHandler.replaceData(
         CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
     );
 }
-
-// // * Trying it out with a custom Density Function
-// const densityFunction = new DensityFunction2DRastrigrinFunction(100, 100);
-// console.log(densityFunction.data);
-//
-// Stipple.stippleDensityFunction(densityFunction, 5, 0.0, 0.01).then(
-//     ({stipples, voronoi}) => {
-//         console.log("stipples", stipples);
-//         console.log("voronoi", voronoi);
-//         bufferHandler.addNewData(
-//             CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-//         );
-//     }
-// )
