@@ -43,11 +43,11 @@ struct Uniform {
 
     var pos = vec4f();
     if (css == 0.0) {
-        pos = vec4f(vec2f(vert.position.x * vert.radius, -vert.position.y * vert.radius) * csm + vert.offset, 0.0, 1.0);
+        pos = vec4f(vert.position * vert.radius * csm + vert.offset, 0.0, 1.0);
     } else {
-        pos = vec4f(vec2f(vert.position.x * vert.radius, -vert.position.y * vert.radius) * csm * vert.density + vert.offset, 0.0, 1.0);
+        pos = vec4f(vert.position * vert.radius * csm * vert.density + vert.offset, 0.0, 1.0);
     }
-//    pos = pos.yxzw;
+    pos = pos.yxzw;
     pos = uniform_buffer.mv_matrix * pos;
 
     vsOut.position = pos;

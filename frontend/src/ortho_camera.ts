@@ -108,6 +108,10 @@ export class OrthoCamera {
         this.right -= zoom * this.aspect * speed;
         this.bottom += zoom * speed;
         this.top -= zoom * speed;
+        // this.left -= zoom * this.aspect * speed;
+        // this.right += zoom * this.aspect * speed;
+        // this.bottom -= zoom * speed;
+        // this.top += zoom * speed;
     }
 
     private clamp(value: number, min: number, max: number): number {
