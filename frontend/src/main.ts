@@ -128,12 +128,12 @@ bufferHandler.register_change(() => {
 });
 
 const uniformBufferSize =
-    4 * 4 +     // screen size vec2 upsized to vec4 by padding
-    16 * 4 +    // mvp mat4
-    4 * 4 +     // change with density f32, point size f32 upsize to vec4 by padding
-    4 * 4 +     // vec4f color 1
-    4 * 4 +     // vec4f color 2
-    4 * 4;      // vec2f stops for blending padded to vec4
+  4 * 4 + // screen size vec2 upsized to vec4 by padding
+  16 * 4 + // mvp mat4
+  4 * 4 + // change with density f32, point size f32 upsize to vec4 by padding
+  4 * 4 + // vec4f color 1
+  4 * 4 + // vec4f color 2
+  4 * 4; // vec2f stops for blending padded to vec4
 
 console.log("uniformBufferSize", uniformBufferSize);
 const uniformBuffer = device.createBuffer({
@@ -205,7 +205,7 @@ canvas.onmousemove = (e) => {
     const distance = vec3.distance(camera.getEye(), camera.getTarget());
     const speed = Math.max(0.01, Math.min(100, distance)) * movement_speed;
     // console.log(distance, speed);
-    camera.translateCamera(e.movementX * speed, -e.movementY * speed, 0);
+    camera.translateCamera(-e.movementY * speed, e.movementX * speed, 0);
     // camera.translateCamera(-e.movementX * movement_speed, -e.movementY * movement_speed, 0);
   }
   requestAnimationFrame(generateFrame);
@@ -231,13 +231,15 @@ function updateUniform() {
   uniformValues.set(camera.getViewProjectionMatrix(), 4); // size 16
 
   // Point Size?
-  uniformValues.set([
-      vary_size_with_density_checkbox.checked ? 1.0: 0.0,     // Change with density
-      parseFloat(stipple_size_multiplier_range.value)         // Overall point size multiplier
-  ], 20); // size 4
+  uniformValues.set(
+    [
+      vary_size_with_density_checkbox.checked ? 1.0 : 0.0, // Change with density
+      parseFloat(stipple_size_multiplier_range.value), // Overall point size multiplier
+    ],
+    20
+  ); // size 4
 
   // uniformValues.set([parseFloat(stipple_size_multiplier_range.value)], 21); // size 4
-
 
   // * Color
   // First color (colorPicker1)
@@ -245,18 +247,21 @@ function updateUniform() {
   // Second color (colorPicker2)
   uniformValues.set(hexcodeToVec4(colorPicker2.value), 28); // size 4
   // color stops
-  uniformValues.set([parseFloat(colorPicker1Range.value), parseFloat(colorPicker2Range.value)], 32); // size 4
+  uniformValues.set(
+    [parseFloat(colorPicker1Range.value), parseFloat(colorPicker2Range.value)],
+    32
+  ); // size 4
 
   device.queue.writeBuffer(uniformBuffer, 0, uniformValues);
 }
 
 function hexcodeToVec4(hexcode: string): Float32Array {
-    const hex = parseInt(hexcode.slice(1), 16);
-    const r = (hex >> 16) & 255;
-    const g = (hex >> 8) & 255;
-    const b = hex & 255;
+  const hex = parseInt(hexcode.slice(1), 16);
+  const r = (hex >> 16) & 255;
+  const g = (hex >> 8) & 255;
+  const b = hex & 255;
 
-    return new Float32Array([r / 255, g / 255, b / 255, 1.0]);
+  return new Float32Array([r / 255, g / 255, b / 255, 1.0]);
 }
 
 function generateFrame() {
@@ -354,7 +359,6 @@ function createCircleVertices(numSegments = 32) {
   };
 }
 
-
 const dataset_dropdown = document.getElementById(
   "dataset_dropdown"
 ) as HTMLSelectElement;
@@ -373,30 +377,44 @@ fidelity_scale.onchange = onFidelityScaleChange;
 onFidelityScaleChange();
 
 function onFidelityScaleChange() {
-    fidelity_x.value = String(parseInt(fidelity_scale.value) * 3);
-    fidelity_y.value = String(parseInt(fidelity_scale.value) * 4);
+  fidelity_x.value = String(parseInt(fidelity_scale.value) * 3);
+  fidelity_y.value = String(parseInt(fidelity_scale.value) * 4);
 }
 
-const initial_stipple_size = document.getElementById("initial_stipple_size") as HTMLInputElement;
-const selected_stipple_size_p = document.getElementById("selected_stipple_size") as HTMLParagraphElement;
+const initial_stipple_size = document.getElementById(
+  "initial_stipple_size"
+) as HTMLInputElement;
+const selected_stipple_size_p = document.getElementById(
+  "selected_stipple_size"
+) as HTMLParagraphElement;
 
 initial_stipple_size.oninput = onStippleSizeChange;
-onStippleSizeChange()
+onStippleSizeChange();
 
 function onStippleSizeChange() {
-    selected_stipple_size_p.innerText = initial_stipple_size.value;
+  selected_stipple_size_p.innerText = initial_stipple_size.value;
 }
 
-const max_iterations = document.getElementById("max_iterations") as HTMLInputElement;
-const show_iterations_input = document.getElementById("show_iterations") as HTMLInputElement;
+const max_iterations = document.getElementById(
+  "max_iterations"
+) as HTMLInputElement;
+const show_iterations_input = document.getElementById(
+  "show_iterations"
+) as HTMLInputElement;
 
 // Multiplier for stipple size
-const stipple_size_multiplier_range = document.getElementById("stipple_size_multiplier") as HTMLInputElement;
-stipple_size_multiplier_range.oninput = () => requestAnimationFrame(generateFrame);
+const stipple_size_multiplier_range = document.getElementById(
+  "stipple_size_multiplier"
+) as HTMLInputElement;
+stipple_size_multiplier_range.oninput = () =>
+  requestAnimationFrame(generateFrame);
 
 // True: Vary point size with density
-const vary_size_with_density_checkbox = document.getElementById("vary_size_with_density") as HTMLInputElement;
-vary_size_with_density_checkbox.onchange = () => requestAnimationFrame(generateFrame);
+const vary_size_with_density_checkbox = document.getElementById(
+  "vary_size_with_density"
+) as HTMLInputElement;
+vary_size_with_density_checkbox.onchange = () =>
+  requestAnimationFrame(generateFrame);
 
 const fetchStipples = async (
   type: "air_pollution" | "temperature" | "earth_relief"
@@ -462,30 +480,34 @@ calc_btn.onclick = async (e) => {
       break;
   }
 
-    const {stipples, voronoi} = await Stipple.stippleDensityFunctionWithWorker(
-        densityFunction,
-        stipple_size,
-        0.0,
-        0.01,
-        max_iter,
-        show_iterations_input.checked ? bufferHandler : null,
-    );
-    console.log("stipples", stipples);
-    console.log("voronoi", voronoi);
+  const { stipples, voronoi } = await Stipple.stippleDensityFunctionWithWorker(
+    densityFunction,
+    stipple_size,
+    0.0,
+    0.001,
+    max_iter,
+    show_iterations_input.checked ? bufferHandler : null
+  );
+  console.log("stipples", stipples);
+  console.log("voronoi", voronoi);
 
-    bufferHandler.replaceData(
-        CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
-    );
-}
+  bufferHandler.replaceData(
+    CircleHelper.circlesToBuffers(Stipple.stipplesToCircles(stipples))
+  );
+};
 
 //Acesss the color with colorPickerX.value
-const colorPicker1 = document.getElementById("CP1") as HTMLInputElement
+const colorPicker1 = document.getElementById("CP1") as HTMLInputElement;
 colorPicker1.oninput = () => requestAnimationFrame(generateFrame);
-const colorPicker2 = document.getElementById("CP2") as HTMLInputElement
+const colorPicker2 = document.getElementById("CP2") as HTMLInputElement;
 colorPicker2.oninput = () => requestAnimationFrame(generateFrame);
 
 //Acess the color range with colorPickerXRange.value
-const colorPicker1Range = document.getElementById("CP1_range") as HTMLInputElement
+const colorPicker1Range = document.getElementById(
+  "CP1_range"
+) as HTMLInputElement;
 colorPicker1Range.onchange = () => requestAnimationFrame(generateFrame);
-const colorPicker2Range = document.getElementById("CP2_range") as HTMLInputElement
+const colorPicker2Range = document.getElementById(
+  "CP2_range"
+) as HTMLInputElement;
 colorPicker2Range.onchange = () => requestAnimationFrame(generateFrame);

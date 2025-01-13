@@ -14,7 +14,7 @@
     <div id="debug"></div>
 
     <div id="main-container">
-      <canvas id="gfx-main" width="800" height="600"></canvas>
+      <canvas id="gfx-main" width="482" height="392"></canvas>
       <div id="map" style="width: 482px; height: 392px"></div>
     </div>
 
@@ -38,7 +38,7 @@
       <div>
         <label for="fidelity_scale">Select the fidelity of the dataset</label>
         <div id="fidelity">
-          <input type="number" name="scale" id="fidelity_scale" value="100" />
+          <input type="number" name="scale" id="fidelity_scale" value="40" />
         </div>
       </div>
 
@@ -58,43 +58,91 @@
       <br />
       <div>
         <label for="initial_stipple_size">Stipple Size</label>
-        <input type="range" min="1" max="10" step="0.1" value="1" id="initial_stipple_size" />
+        <input
+          type="range"
+          min="1"
+          max="10"
+          step="0.1"
+          value="1"
+          id="initial_stipple_size"
+        />
         <p id="selected_stipple_size"></p>
       </div>
 
       <div>
-        <label for="stipple_size_multiplier">Stipple Size multiplier for rendering</label>
-        <input type="range" min="0.1" max="10" step="0.01" value="1" id="stipple_size_multiplier">
+        <label for="stipple_size_multiplier"
+          >Stipple Size multiplier for rendering</label
+        >
+        <input
+          type="range"
+          min="0.1"
+          max="10"
+          step="0.01"
+          value="1"
+          id="stipple_size_multiplier"
+        />
 
-        <label for="vary_size_with_density">Vary stipple size with density</label><input type="checkbox" id="vary_size_with_density">
+        <label for="vary_size_with_density"
+          >Vary stipple size with density</label
+        ><input type="checkbox" id="vary_size_with_density" />
       </div>
 
       <div>
         <label for="max_iterations">Max iterations: </label>
         <input
-            type="number"
-            name="max_iterations"
-            id="max_iterations"
-            value="10000"
+          type="number"
+          name="max_iterations"
+          id="max_iterations"
+          value="10000"
         />
         <div>
-          <label for="show_iterations">Show the stipple algorithm working?</label>
+          <label for="show_iterations"
+            >Show the stipple algorithm working?</label
+          >
           <input type="checkbox" id="show_iterations" name="show_iterations" />
         </div>
       </div>
 
-      <div style="width: 100%; display: flex; align-items: center; height: auto">
-          <label for="CP1">Color1</label>
-          <input type="color" id="CP1" value="#000000"
-                 style="height: 50px; width: 70%; margin: 10px;">
-          <label for="CP2">Color2</label>
-          <input type="color" id="CP2" value="#FFFFFF"
-                 style="height: 50px; width: 70%; margin: 10px;">
+      <div
+        style="width: 100%; display: flex; align-items: center; height: auto"
+      >
+        <label for="CP1">Color1</label>
+        <input
+          type="color"
+          id="CP1"
+          value="#000000"
+          style="height: 50px; width: 70%; margin: 10px"
+        />
+        <label for="CP2">Color2</label>
+        <input
+          type="color"
+          id="CP2"
+          value="#FFFFFF"
+          style="height: 50px; width: 70%; margin: 10px"
+        />
       </div>
 
-      <div style="width: 100%; display: flex; align-items: center; height: auto">
-          <input type="range" id="CP1_range" min="0.0" max="1" step="0.05" value="0.0" style="margin: 5px" >
-          <input type="range" id="CP2_range" min="0.0" max="1" step="0.05" value="1.0" style="margin: 5px">
+      <div
+        style="width: 100%; display: flex; align-items: center; height: auto"
+      >
+        <input
+          type="range"
+          id="CP1_range"
+          min="0.0"
+          max="1"
+          step="0.05"
+          value="0.0"
+          style="margin: 5px"
+        />
+        <input
+          type="range"
+          id="CP2_range"
+          min="0.0"
+          max="1"
+          step="0.05"
+          value="1.0"
+          style="margin: 5px"
+        />
       </div>
 
       <br />
