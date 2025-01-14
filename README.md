@@ -12,13 +12,17 @@ This repository contains the project for the Visualization 2 (186.833) course at
 The project is structured as follows:
 
 - `proposals and presentations/`: Contains project proposals and presentation slides
-- `data/`: Contains the input data for the project
-- `backend/`: Contains the backend code, implemented in Node.js
+- `database/`: Contains the sql files to fil the database as well as the initialization script
+- `backend/`: Contains the backend code, implemented in Node.js and Express.js
 - `frontend/`: Contains the frontend code, implemented using TypeScript and WebGPU
 
 ## How to run the project
 
-Each of the backend and frontend code has its own README file with instructions on how to run the code.
+Each of the backend and frontend code has its own README file with instructions on how to run the code separately on your local machine. We've also made the docker compose so you can just run the whole project on your machine using:
+
+```bash
+docker-compose up --build
+```
 
 ## License
 
