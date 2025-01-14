@@ -45,6 +45,88 @@
       by Görtler et al.
     </p>
 
+    <h2>Project Details</h2>
+
+    <h3>Data pipeline</h3>
+    <p>
+      Our data pipeline began with GeoTIFF (.tif) files which are a standard
+      format for storing georeferenced raster images. We used GDAL (Geospatial
+      Data Abstraction Library) a powerful translator library by the Open Source
+      Geospatial Foundation to process these files. The workflow involved
+      converting large GeoTIFF files into manageable tiles which we then
+      transformed into SQL using raster2pgsql. These SQL files are then used to
+      populate our PostGIS(PostgreSQL) database. The data is then returned by
+      our backend which returns the stipples in a uniformly spaced grid,
+      generated from normally distributed sample points within the bounded
+      geographic frame.
+    </p>
+
+    <h3>Stippling algorithm implementation</h3>
+    <p>
+      At the core of our visualization is the Linde-Buzo-Gray (LBG) algorithm
+      implementation. The algorithm starts with a set of points in a uniformly
+      spaced grid. These points undergo an iterative refinement process where
+      each point is moved to the centroid of its Voronoi region, weighted by the
+      underlying density function (our geographic data). This process continues
+      until convergence or a maximum number of iterations is reached, resulting
+      in a distribution of points that effectively represents the density of the
+      underlying data.
+    </p>
+
+    <h3>WebGPU visualization</h3>
+    <p>
+      For rendering we used WebGPU, a modern graphics API that provides
+      high-performance 3D graphics and computation capabilities. Our
+      implementation uses compute shaders for efficient point processing and
+      rendering pipelines for smooth visualization. The WebGPU implementation
+      allows us to handle thousands of stipple points in real-time, with dynamic
+      updates as users adjust parameters or pan across the map. We've
+      implemented features such as variable stipple sizes based on density,
+      color mapping and interactive controls for adjusting the visualization
+      parameters.
+    </p>
+
+    <h3>Interactive Features</h3>
+    <p>
+      The application provides a set of controls through its settings panel,
+      allowing users to fine-tune various aspects of the visualization:
+    </p>
+    <ul>
+      <li>Adjustable fidelity controls for both X and Y dimensions</li>
+      <li>Dynamic stipple size modification with density-based scaling</li>
+      <li>Color customization for stipple points with start and stop color</li>
+      <li>Real-time algorithm iteration visualization</li>
+      <li>
+        Multiple dataset selection (air pollution, temperature, earth relief,
+        linear function...)
+      </li>
+    </ul>
+
+    <h2>Example Visualizations</h2>
+    <img
+      src="./images/screenshot-1.jpg"
+      alt="Example Stippling Visualization 1"
+    />
+    <img
+      src="./images/screenshot-2.jpg"
+      alt="Example Stippling Visualization 2"
+    />
+
+    <h2>Documentation & Source Code</h2>
+    <p>
+      The complete source code documentation can be found at
+      <a
+        href="https://dominikkanjuh.github.io/TUW-Visualization-2/frontend/index.html"
+        >https://dominikkanjuh.github.io/TUW-Visualization-2/frontend/index.html</a
+      >.
+    </p>
+    <p>
+      The source code repository is available on GitHub at
+      <a href="https://github.com/DominikKanjuh/TUW-Visualization-2"
+        >https://github.com/DominikKanjuh/TUW-Visualization-2</a
+      >.
+    </p>
+
     <h2>Project Structure</h2>
     <ul>
       <li>
@@ -60,16 +142,6 @@
       </li>
     </ul>
 
-    <h2>Example Visualizations</h2>
-    <img
-      src="./images/screenshot-1.jpg"
-      alt="Example Stippling Visualization 1"
-    />
-    <img
-      src="./images/screenshot-2.jpg"
-      alt="Example Stippling Visualization 2"
-    />
-
     <h2>Running the Project</h2>
     <p>
       Each of the backend and frontend code has its own README file with
@@ -81,5 +153,48 @@
       GitHub, they've been stored on OneDrive. To download them, you can run the
       script <code>/database/download-sql.sh</code>
     </p>
+
+    <p>
+      For the simplest way to run the entire project (after downloading the sql
+      files) you can use Docker Compose:
+      <code>docker compose up --build</code>
+    </p>
+
+    <h2>Dataset Acknowledgments</h2>
+    <p>
+      We would like to acknowledge the following sources for providing the
+      datasets used in this project:
+    </p>
+
+    <ul>
+      <li>
+        <strong>Air Pollution</strong> – Global air pollution of PM2.5 in 2001
+        <br />
+        <a
+          href="https://earthdata.nasa.gov/data/catalog/sedac-ciesin-sedac-sdei-gwrpm25-mmsaod-4gl03-4.03"
+        >
+          NASA Earth Data: Global Annual PM2.5 Grids
+        </a>
+      </li>
+      <li>
+        <strong>Temperature</strong> - Global maximum temperatures in January of
+        2010
+        <br />
+        <a
+          href="https://www.kaggle.com/datasets/abireltaief/highresolution-geotiff-images-of-climatic-data"
+        >
+          Kaggle: High-Resolution GeoTIFF Images of Climatic Data
+        </a>
+      </li>
+      <li>
+        <strong>Relief</strong> - Global shaded relief, no water bodies
+        <br />
+        <a
+          href="https://www.naturalearthdata.com/downloads/10m-raster-data/10m-natural-earth-1/"
+        >
+          Natural Earth Data: 10m Natural Earth 1
+        </a>
+      </li>
+    </ul>
   </body>
 </html>
