@@ -1,19 +1,52 @@
+/**
+ * @fileoverview Orthographic camera implementation for 2D visualization
+ * @module frontend/ortho_camera
+ */
+
 import { mat4, vec3 } from "webgpu-matrix";
 
+/**
+ * Orthographic camera class for 2D scene viewing
+ * Handles view and projection matrices for orthographic projection
+ * @class OrthoCamera
+ */
 export class OrthoCamera {
+  /** Projection matrix for orthographic view */
   private projectionMatrix: Float32Array;
+  /** View matrix for camera position and orientation */
   private viewMatrix: Float32Array;
 
+  /** Camera position in world space */
   private eye: vec3.default;
+  /** Point the camera is looking at */
   private target: vec3.default;
+  /** Up vector for camera orientation */
   private up: vec3.default;
 
+  /** Aspect ratio of the viewport */
   private aspect: number;
+  /** Left bound of the orthographic frustum */
   private left: number;
+  /** Right bound of the orthographic frustum */
   private right: number;
+  /** Bottom bound of the orthographic frustum */
   private bottom: number;
+  /** Top bound of the orthographic frustum */
   private top: number;
 
+  /**
+   * Creates a new orthographic camera
+   * @constructor
+   * @param {number} left - Left bound of view frustum
+   * @param {number} right - Right bound of view frustum
+   * @param {number} bottom - Bottom bound of view frustum
+   * @param {number} top - Top bound of view frustum
+   * @param {number} near - Near clipping plane
+   * @param {number} far - Far clipping plane
+   * @param {vec3.default} [eye=[0,0,-3]] - Camera position
+   * @param {vec3.default} [target=[0,0,1]] - Look-at target
+   * @param {vec3.default} [up=[0,1,0]] - Up vector
+   */
   constructor(
     left: number,
     right: number,
@@ -44,10 +77,16 @@ export class OrthoCamera {
     mat4.ortho(left, right, bottom, top, near, far, this.projectionMatrix);
   }
 
+  /**
+   * Updates the view matrix based on current camera position
+   */
   public refreshViewMatrix(): void {
     mat4.lookAt(this.eye, this.target, this.up, this.viewMatrix);
   }
 
+  /**
+   * Updates the projection matrix with current frustum bounds
+   */
   public refreshProjectionMatrix(): void {
     mat4.ortho(
       this.left,
@@ -60,11 +99,21 @@ export class OrthoCamera {
     );
   }
 
+  /**
+   * Gets the current zoom level based on frustum width
+   * @returns {number} Current zoom level
+   * @private
+   */
   private getZoomLevel(): number {
     return (this.right - this.left) / 2;
   }
 
-  // move camera
+  /**
+   * Translates the camera in world space
+   * @param {number} x - X-axis translation
+   * @param {number} y - Y-axis translation
+   * @param {number} z - Z-axis translation (triggers zoom if non-zero)
+   */
   public translateCamera(x: number, y: number, z: number): void {
     const speed = this.getZoomLevel() * 0.05;
 
@@ -80,6 +129,11 @@ export class OrthoCamera {
     this.refreshProjectionMatrix();
     this.refreshViewMatrix();
   }
+
+  /**
+   * Maps orthographic bounds to latitude/longitude coordinates
+   * @returns {Object} Object containing min/max latitude and longitude
+   */
   public mapToLatLng() {
     // Define the bounds for latitude and longitude
     const minLat = -90;
@@ -105,7 +159,10 @@ export class OrthoCamera {
     };
   }
 
-  // make the orthographic area bigger or smaller
+  /**
+   * Zooms the camera by adjusting the orthographic frustum
+   * @param {number} zoom - Zoom factor (positive = zoom in, negative = zoom out)
+   */
   public zoomCamera(zoom: number): void {
     const speed = this.getZoomLevel() * 0.05;
 
@@ -115,29 +172,60 @@ export class OrthoCamera {
     this.top -= zoom * speed;
   }
 
+  /**
+   * Clamps a value between min and max
+   * @param {number} value - Value to clamp
+   * @param {number} min - Minimum allowed value
+   * @param {number} max - Maximum allowed value
+   * @returns {number} Clamped value
+   * @private
+   */
   private clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
   }
 
-  // get view-projection matrix
+  /**
+   * Gets the combined view-projection matrix
+   * @returns {Float32Array} View-projection matrix
+   */
   public getViewProjectionMatrix(): Float32Array {
     const viewProjectionMatrix = mat4.create();
     mat4.multiply(this.projectionMatrix, this.viewMatrix, viewProjectionMatrix);
     return viewProjectionMatrix;
   }
 
+  /**
+   * Gets the camera's target point
+   * @returns {vec3.default} Target point
+   */
   public getTarget(): vec3.default {
     return this.target;
   }
 
+  /**
+   * Gets the camera's position
+   * @returns {vec3.default} Camera position
+   */
   public getEye(): vec3.default {
     return this.eye;
   }
 
+  /**
+   * Converts radians to degrees
+   * @param {number} rad - Angle in radians
+   * @returns {number} Angle in degrees
+   * @private
+   */
   private radToDeg(rad: number): number {
     return (rad * 180) / Math.PI;
   }
 
+  /**
+   * Converts degrees to radians
+   * @param {number} deg - Angle in degrees
+   * @returns {number} Angle in radians
+   * @private
+   */
   private degToRad(deg: number): number {
     return (deg * Math.PI) / 180;
   }

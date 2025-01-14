@@ -1,5 +1,20 @@
+/**
+ * @fileoverview Utility function for generating WebGPU buffers from stipple data
+ * @module frontend/generateBuffers
+ */
+
 import { Stipple } from './Stippling/Stipple';
 
+/**
+ * Generates vertex and index buffers for rendering stipples
+ * @param {GPUDevice} device - The WebGPU device
+ * @param {Stipple[]} stipples - Array of stipple points to render
+ * @returns {{
+ *   vertexBuffer: GPUBuffer,
+ *   indexBuffer: GPUBuffer,
+ *   vertexCount: number
+ * }} Object containing the vertex buffer, index buffer, and vertex count
+ */
 export function generateBuffers(device: GPUDevice, stipples: Stipple[]) {
     const vertices = [];
     const indices = [];

@@ -1,12 +1,17 @@
+/**
+ * @fileoverview Repository layer for API interactions
+ * @module frontend/api/repository
+ */
+
 import { StiplesResponse, StiplesQueryParams, DataSetType } from "./interface";
 import { getJson } from "./utils";
 import * as R from "./routes";
 
 /**
- * Fetch stiples data from the API.
- * @param datasetType - Indicates which dataset to fetch stiples from
- * @param queryParams - Query parameters for the /stiples endpoint.
- * @returns The stiples response.
+ * Fetch stipples data from the API for a specific dataset
+ * @param {DataSetType} datasetType - Type of dataset to fetch (air_pollution, temperature, or earth_relief)
+ * @param {StiplesQueryParams} queryParams - Query parameters for the request
+ * @returns {Promise<StiplesResponse>} Promise resolving to the stipples grid data
  */
 export const fetchStiples = async (
   datasetType: DataSetType,

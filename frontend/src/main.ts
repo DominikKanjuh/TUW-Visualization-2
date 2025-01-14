@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Main application entry point handling WebGPU visualization, map integration, and UI controls
+ * @module frontend/main
+ */
 import { Stipple } from "./Stippling/Stipple";
 import shader from "./shaders/shader.wgsl";
 import { mat4, vec3 } from "webgpu-matrix";
@@ -15,8 +19,12 @@ import "leaflet/dist/leaflet.css";
 
 import "./styles.css";
 
+/** Global map instance */
 let map: L.Map | null = null;
 
+/**
+ * Initializes the Leaflet map with OpenStreetMap tiles
+ */
 function initializeMap(): void {
   const mapContainer = document.getElementById("map");
 
@@ -30,19 +38,27 @@ function initializeMap(): void {
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 }
 
-// Initialize all the components
+/**
+ * Initialize components on DOM load
+ */
 document.addEventListener("DOMContentLoaded", () => {
-  //   initializeSizes();
   initializeDrawer();
   initializeMap();
 });
 
+/**
+ * WebGPU initialization and pipeline setup
+ * Handles canvas context, shaders, and buffer creation
+ */
+
+// Canvas and debug setup
 const canvas = document.getElementById("gfx-main") as HTMLCanvasElement;
 const debug_div = document.getElementById("debug") as HTMLElement;
 
 let aspect = canvas.width / canvas.height;
 console.log("aspect", canvas.width, canvas.height, aspect);
 
+// WebGPU adapter and device initialization
 const adapter = (await navigator.gpu.requestAdapter()) as GPUAdapter;
 if (!adapter) {
   debug_div.innerText = "WebGPU is supported but no adapter found!";
@@ -97,6 +113,7 @@ const pipeline = device.createRenderPipeline({
   },
 });
 
+/** Unit size for static vertex data in bytes */
 // ! Used for initial buffer size
 const staticUnitSize =
   1 * 4 + // density is 1 32bit float
@@ -127,6 +144,7 @@ bufferHandler.register_change(() => {
   requestAnimationFrame(generateFrame);
 });
 
+/** Uniform buffer layout in bytes */
 const uniformBufferSize =
   4 * 4 + // screen size vec2 upsized to vec4 by padding
   16 * 4 + // mvp mat4
@@ -156,6 +174,10 @@ const vertexBuffer = device.createBuffer({
 });
 device.queue.writeBuffer(vertexBuffer, 0, vertexData);
 
+/**
+ * Updates the vertex buffer with new data
+ * @param {Float32Array} newData - New vertex data to upload
+ */
 function updateVertexBuffer(newData: Float32Array) {
   device.queue.writeBuffer(staticVertexBuffer, 0, newData);
 }
@@ -217,6 +239,10 @@ canvas.onwheel = (e) => {
   requestAnimationFrame(generateFrame);
 };
 
+/**
+ * Updates uniform buffer with current state
+ * Handles screen size, MVP matrix, point size, and colors
+ */
 function updateUniform() {
   // create a typed-array to hold the values for the uniforms in JavaScript
   const uniformValues = new Float32Array(uniformBufferSize / 4);
@@ -250,6 +276,12 @@ function updateUniform() {
   device.queue.writeBuffer(uniformBuffer, 0, uniformValues);
 }
 
+/**
+ * Converts a hex color code to a WebGPU-compatible vec4 array.
+ *
+ * @param {string} hexcode - A hex color code (e.g., "#FFFFFF").
+ * @returns {Float32Array} A normalized vec4 array representing the color.
+ */
 function hexcodeToVec4(hexcode: string): Float32Array {
   const hex = parseInt(hexcode.slice(1), 16);
   const r = (hex >> 16) & 255;
@@ -259,6 +291,10 @@ function hexcodeToVec4(hexcode: string): Float32Array {
   return new Float32Array([r / 255, g / 255, b / 255, 1.0]);
 }
 
+/**
+ * Generates and submits a new frame for rendering
+ * Updates uniforms and executes the render pass
+ */
 function generateFrame() {
   updateUniform();
 
@@ -274,7 +310,6 @@ function generateFrame() {
   pass.setBindGroup(0, bindGroup);
   pass.setVertexBuffer(0, vertexBuffer);
   pass.setVertexBuffer(1, staticVertexBuffer);
-  // pass.setVertexBuffer(2, changingVertexBuffer);
 
   pass.draw(numVertices, kNumObjects);
 
@@ -284,6 +319,10 @@ function generateFrame() {
   device.queue.submit([commandBuffer]);
 }
 
+/**
+ * ResizeObserver callback for canvas resizing
+ * Updates canvas dimensions and triggers re-render
+ */
 const observer = new ResizeObserver((entries) => {
   for (const entry of entries) {
     const canvas = entry.target as HTMLCanvasElement;
@@ -324,7 +363,6 @@ function createCircleVertices(numSegments = 32) {
   function addVertex(x: number, y: number, z: number = 0) {
     vertexData[offset++] = x;
     vertexData[offset++] = y;
-    // vertexData[offset++] = z;
   }
 
   for (let i = 0; i < numSegments; ++i) {
@@ -357,6 +395,7 @@ const calc_btn = document.getElementById(
   "btn-compute-stiples"
 ) as HTMLButtonElement;
 
+// Fidelity controls
 const fidelity_scale = document.getElementById(
   "fidelity_scale"
 ) as HTMLInputElement;
@@ -366,6 +405,10 @@ const fidelity_y = document.getElementById("fidelity_y") as HTMLInputElement;
 fidelity_scale.onchange = onFidelityScaleChange;
 onFidelityScaleChange();
 
+/**
+ * Updates fidelity values based on scale input
+ * X = scale * 3, Y = scale * 4 to maintain aspect ratio
+ */
 function onFidelityScaleChange() {
   fidelity_x.value = String(parseInt(fidelity_scale.value) * 3);
   fidelity_y.value = String(parseInt(fidelity_scale.value) * 4);
@@ -406,6 +449,11 @@ const vary_size_with_density_checkbox = document.getElementById(
 vary_size_with_density_checkbox.onchange = () =>
   requestAnimationFrame(generateFrame);
 
+/**
+ * Fetches and processes stipple data from the API
+ * @param {DataSetType} type - Dataset type to fetch
+ * @returns {Promise<DensityFunction2D>} Processed density function
+ */
 const fetchStipples = async (
   type: "air_pollution" | "temperature" | "earth_relief"
 ): Promise<DensityFunction2D> => {
