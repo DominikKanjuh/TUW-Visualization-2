@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> frontend/src/Stippling/stippleWorker.worker.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">TUW Visualization 2 Documentation by David Bauer and Dominik Kanjuh</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-backend_config_db.html">backend/config/db</a></li><li><a href="module-backend_index.html">backend/index</a></li><li><a href="module-backend_routes_stiples.html">backend/routes/stiples</a></li><li><a href="module-frontend_ProgressBar.html">frontend/ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.html">frontend/Stippling/BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.html">frontend/Stippling/DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.html">frontend/Stippling/DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.html">frontend/Stippling/DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.html">frontend/Stippling/DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.html">frontend/Stippling/Stipple</a></li><li><a href="module-frontend_Stippling_stippleWorker.html">frontend/Stippling/stippleWorker</a></li><li><a href="module-frontend_api_routes.html">frontend/api/routes</a></li><li><a href="module-frontend_api_utils.html">frontend/api/utils</a></li><li><a href="module-frontend_camera.html">frontend/camera</a></li><li><a href="module-frontend_components_drawer.html">frontend/components/drawer</a></li><li><a href="module-frontend_main.html">frontend/main</a></li><li><a href="module-frontend_ortho_camera.html">frontend/ortho_camera</a></li></ul><h3>Classes</h3><ul><li><a href="CircleHelper.html">CircleHelper</a></li><li><a href="Util.html">Util</a></li><li><a href="module-frontend_ProgressBar.ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar.ProgressBar_ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar-ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler_BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler-BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D_DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder_DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder-DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction_DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction-DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2D-DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear_DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear-DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple_Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling_Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple-Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple-Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple_WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_camera-Camera.html">Camera</a></li><li><a href="module-frontend_camera-Camera_Camera.html">Camera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera_OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera-OrthoCamera.html">OrthoCamera</a></li></ul><h3>Interfaces</h3><ul><li><a href="PostgresError.html">PostgresError</a></li><li><a href="QueryParams.html">QueryParams</a></li><li><a href="Stiple.html">Stiple</a></li><li><a href="StiplesQueryParams.html">StiplesQueryParams</a></li><li><a href="StiplesResponse.html">StiplesResponse</a></li><li><a href="Stipple.html">Stipple</a></li><li><a href="StipplesRow.html">StipplesRow</a></li><li><a href="TableConfig.html">TableConfig</a></li><li><a href="ValidatedParams.html">ValidatedParams</a></li><li><a href="ValidationFailure.html">ValidationFailure</a></li><li><a href="ValidationSuccess.html">ValidationSuccess</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DATASET_CONFIGS">DATASET_CONFIGS</a></li><li><a href="global.html#fetchStiples">fetchStiples</a></li><li><a href="global.html#generateBuffers">generateBuffers</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>frontend/src/Stippling/stippleWorker.worker.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Web Worker implementation for stipple generation and distribution
+ * @module frontend/Stippling/stippleWorker
+ */
+
+import { DensityFunction2D } from "./DensityFunction2D";
+import * as d3 from "d3";
+import { FromWorkerMessage, ToWorkerMessage } from "./WorkerTypes";
+import { Voronoi } from "d3";
+
+/** Worker context */
+const ctx: Worker = self as any;
+
+/**
+ * Worker message handler
+ * Processes density function and generates stipples
+ * @param {MessageEvent} event - Worker message event containing stippling parameters
+ */
+ctx.onmessage = async function (event) {
+  const {
+    densityFunction,
+    initialStippleRadius,
+    initialErrorThreshold,
+    thresholdConvergenceRate,
+    maxIterations,
+  } = event.data as ToWorkerMessage;
+
+  console.log("Worker received data", event.data);
+
+  const workerDensityFunction = new DensityFunction2D(densityFunction.data);
+
+  await stippleDensityFunction(
+    workerDensityFunction,
+    initialStippleRadius,
+    initialErrorThreshold,
+    thresholdConvergenceRate,
+    maxIterations
+  );
+};
+
+/**
+ * Main stippling algorithm
+ * Iteratively places and adjusts stipples based on density function
+ * @async
+ * @param {DensityFunction2D} densityFunction - Target density function
+ * @param {number} initialStippleRadius - Starting radius for stipples
+ * @param {number} initialErrorThreshold - Initial error tolerance
+ * @param {number} thresholdConvergenceRate - Rate of error threshold increase
+ * @param {number} maxIterations - Maximum number of iterations
+ */
+async function stippleDensityFunction(
+  densityFunction: DensityFunction2D,
+  initialStippleRadius: number,
+  initialErrorThreshold: number,
+  thresholdConvergenceRate: number,
+  maxIterations: number
+): Promise&lt;void> {
+  // Initialize stipples
+  const stippleArea = Math.pow(initialStippleRadius, 2) * Math.PI;
+  const numOfInitialStipples = Math.round(
+    ((densityFunction.width * densityFunction.height) / stippleArea) * 0.7
+  );
+
+  let stipples = createRandomStipples(
+    numOfInitialStipples,
+    densityFunction.width,
+    densityFunction.height
+  );
+
+  // * Loop until convergence
+  let lastVoronoi = null;
+  let errorThreshold = initialErrorThreshold;
+  let splitOrMerge_happened = false;
+  let iteration = 0;
+
+  do {
+    splitOrMerge_happened = false;
+    // Create Voronoi diagram
+    const voronoi = d3.Delaunay.from(stipples.map((s) => [s.x, s.y])).voronoi([
+      0,
+      0,
+      densityFunction.width,
+      densityFunction.height,
+    ]);
+
+    stipples = densityFunction.assignDensity(
+      stipples,
+      voronoi
+    ) as WorkerStipple[];
+
+    // Handle stipple changes (splitting/merging)
+    const change = handleStippleChange(
+      stipples,
+      voronoi,
+      stippleArea,
+      errorThreshold
+    );
+    splitOrMerge_happened = change.change;
+    stipples = change.new_stipples;
+    lastVoronoi = voronoi;
+
+    // Send progress update
+    ctx.postMessage({
+      progress: (iteration / maxIterations) * 100,
+      done: false,
+      iteration,
+      stipples: fillStippleProperties(stipples, densityFunction),
+      voronoi: lastVoronoi,
+    } as FromWorkerMessage);
+
+    errorThreshold += thresholdConvergenceRate;
+    iteration++;
+  } while (splitOrMerge_happened &amp;&amp; iteration &lt; maxIterations);
+
+  // Send final result
+  ctx.postMessage({
+    progress: 100,
+    done: true,
+    iteration,
+    stipples: fillStippleProperties(stipples, densityFunction),
+    voronoi: lastVoronoi,
+  } as FromWorkerMessage);
+}
+
+/**
+ * Handles stipple changes based on density thresholds
+ * @param {WorkerStipple[]} stipples - Current stipples
+ * @param {Voronoi&lt;number>} voronoi - Current Voronoi diagram
+ * @param {number} area - Target area per stipple
+ * @param {number} error - Error threshold
+ * @returns {{change: boolean, new_stipples: WorkerStipple[]}} Change status and updated stipples
+ */
+function handleStippleChange(
+  stipples: WorkerStipple[],
+  voronoi: Voronoi&lt;number>,
+  area: number,
+  error: number
+): { change: boolean; new_stipples: WorkerStipple[] } {
+  let new_stipples: WorkerStipple[] = [];
+  let change = false;
+
+  const deleteThreshold = area - error;
+  const splitThreshold = area + error;
+
+  for (let i = 0; i &lt; stipples.length; ++i) {
+    const s = stipples[i];
+    const cell = d3.polygonHull(voronoi.cellPolygon(i))!;
+    if (s.density &lt; deleteThreshold) {
+      change = true;
+    } else if (s.density > splitThreshold) {
+      change = true;
+      const { cell1, cell2 } = splitCell(cell);
+      s.setPosition(cell1[0], cell1[1]);
+      new_stipples.push(s);
+      new_stipples.push(new WorkerStipple(cell2[0], cell2[1]));
+    } else {
+      s.setPosition(...d3.polygonCentroid(cell));
+      new_stipples.push(s);
+    }
+  }
+
+  return { change, new_stipples };
+}
+
+/**
+ * Normalizes stipple properties for visualization
+ * @param {WorkerStipple[]} stipples - Stipples to process
+ * @param {DensityFunction2D} densityFunction - Reference density function
+ * @returns {WorkerStipple[]} Processed stipples with normalized properties
+ */
+function fillStippleProperties(
+  stipples: WorkerStipple[],
+  densityFunction: DensityFunction2D
+): WorkerStipple[] {
+  const maxDensity = Math.max(...stipples.map((s) => s.density));
+  const minDensity = Math.min(...stipples.map((s) => s.density));
+
+  stipples.map((s) => {
+    s.density = (s.density - minDensity) / (maxDensity - minDensity);
+    s.relativeX = s.x / densityFunction.width;
+    s.relativeY = s.y / densityFunction.height;
+  });
+
+  return stipples;
+}
+
+/**
+ * Creates random stipples within bounds
+ * @param {number} numStipples - Number of stipples to create
+ * @param {number} maxX - Maximum X coordinate
+ * @param {number} maxY - Maximum Y coordinate
+ * @param {Function} [sampler=d3.randomUniform] - Random number generator
+ * @returns {WorkerStipple[]} Array of randomly positioned stipples
+ */
+function createRandomStipples(
+  numStipples: number,
+  maxX: number,
+  maxY: number,
+  sampler = d3.randomUniform
+): WorkerStipple[] {
+  const stipples: WorkerStipple[] = [];
+  const xSampler = sampler(0, maxX);
+  const ySampler = sampler(0, maxY);
+
+  for (let i = 0; i &lt; numStipples; i++) {
+    stipples.push(new WorkerStipple(xSampler(), ySampler()));
+  }
+  return stipples;
+}
+
+/**
+ * Splits a Voronoi cell into two points
+ * @param {Array&lt;[number, number]>} cell - Cell vertices
+ * @returns {{cell1: [number, number], cell2: [number, number]}} Two new points
+ */
+function splitCell(cell: Array&lt;[number, number]>) {
+  const centroid = d3.polygonCentroid(cell);
+  let largestDir = [0, 0];
+  let secondLargestDir = [0, 0];
+  let largestDistance = 0;
+  let secondLargestDistance = 0;
+
+  for (const p of cell) {
+    const direction = [p[0] - centroid[0], p[1] - centroid[1]];
+    const squaredDistance = direction.reduce(
+      (acc, c) => acc + Math.pow(c, 2),
+      0
+    );
+    if (squaredDistance > largestDistance) {
+      secondLargestDistance = largestDistance;
+      secondLargestDir = largestDir;
+      largestDistance = squaredDistance;
+      largestDir = direction;
+    }
+  }
+  return {
+    cell1: [
+      centroid[0] + largestDir[0] * 0.5,
+      centroid[1] + largestDir[1] * 0.5,
+    ],
+    cell2: [
+      centroid[0] + secondLargestDir[0] * 0.5,
+      centroid[1] + secondLargestDir[1] * 0.5,
+    ],
+  };
+}
+
+/**
+ * Worker-specific stipple class
+ * @class WorkerStipple
+ */
+class WorkerStipple {
+  x: number;
+  y: number;
+  relativeX: number;
+  relativeY: number;
+  density: number;
+  radius: number;
+
+  static maxIterations = 100;
+
+  /**
+   * Creates a new worker stipple
+   * @constructor
+   * @param {number} x - X coordinate
+   * @param {number} y - Y coordinate
+   * @param {number} [density=0.5] - Initial density
+   * @param {number} [radius=0.5] - Initial radius
+   */
+  constructor(
+    x: number,
+    y: number,
+    density: number = 0.5,
+    radius: number = 0.5
+  ) {
+    this.x = x;
+    this.y = y;
+    this.relativeX = 0;
+    this.relativeY = 0;
+    this.density = density;
+    this.radius = radius;
+  }
+
+  /**
+   * Updates stipple position
+   * @param {number} x - New X coordinate
+   * @param {number} y - New Y coordinate
+   */
+  setPosition(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  /**
+   * Gets current position
+   * @returns {number[]} [x, y] coordinates
+   */
+  position(): number[] {
+    return [this.x, this.y];
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

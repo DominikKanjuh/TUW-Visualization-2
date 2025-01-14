@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> frontend/src/Stippling/DensityFunction2D.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">TUW Visualization 2 Documentation by David Bauer and Dominik Kanjuh</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-backend_config_db.html">backend/config/db</a></li><li><a href="module-backend_index.html">backend/index</a></li><li><a href="module-backend_routes_stiples.html">backend/routes/stiples</a></li><li><a href="module-frontend_ProgressBar.html">frontend/ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.html">frontend/Stippling/BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.html">frontend/Stippling/DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.html">frontend/Stippling/DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.html">frontend/Stippling/DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.html">frontend/Stippling/DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.html">frontend/Stippling/Stipple</a></li><li><a href="module-frontend_Stippling_stippleWorker.html">frontend/Stippling/stippleWorker</a></li><li><a href="module-frontend_api_routes.html">frontend/api/routes</a></li><li><a href="module-frontend_api_utils.html">frontend/api/utils</a></li><li><a href="module-frontend_camera.html">frontend/camera</a></li><li><a href="module-frontend_components_drawer.html">frontend/components/drawer</a></li><li><a href="module-frontend_main.html">frontend/main</a></li><li><a href="module-frontend_ortho_camera.html">frontend/ortho_camera</a></li></ul><h3>Classes</h3><ul><li><a href="CircleHelper.html">CircleHelper</a></li><li><a href="Util.html">Util</a></li><li><a href="module-frontend_ProgressBar.ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar.ProgressBar_ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar-ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler_BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler-BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D_DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder_DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder-DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction_DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction-DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2D-DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear_DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear-DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple_Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling_Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple-Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple-Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple_WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_camera-Camera.html">Camera</a></li><li><a href="module-frontend_camera-Camera_Camera.html">Camera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera_OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera-OrthoCamera.html">OrthoCamera</a></li></ul><h3>Interfaces</h3><ul><li><a href="PostgresError.html">PostgresError</a></li><li><a href="QueryParams.html">QueryParams</a></li><li><a href="Stiple.html">Stiple</a></li><li><a href="StiplesQueryParams.html">StiplesQueryParams</a></li><li><a href="StiplesResponse.html">StiplesResponse</a></li><li><a href="Stipple.html">Stipple</a></li><li><a href="StipplesRow.html">StipplesRow</a></li><li><a href="TableConfig.html">TableConfig</a></li><li><a href="ValidatedParams.html">ValidatedParams</a></li><li><a href="ValidationFailure.html">ValidationFailure</a></li><li><a href="ValidationSuccess.html">ValidationSuccess</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DATASET_CONFIGS">DATASET_CONFIGS</a></li><li><a href="global.html#fetchStiples">fetchStiples</a></li><li><a href="global.html#generateBuffers">generateBuffers</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>frontend/src/Stippling/DensityFunction2D.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview 2D density function implementation for stipple generation
+ * @module frontend/Stippling/DensityFunction2D
+ */
+
+import * as d3 from "d3";
+import { Stipple } from "./Stipple";
+import { Voronoi } from "d3";
+import { Util } from "../util";
+
+/**
+ * Represents a 2D density function for stipple distribution
+ * Handles density calculations, normalization, and Voronoi cell assignments
+ * @class DensityFunction2D
+ */
+export class DensityFunction2D {
+  /** 2D array of density values */
+  data: number[][];
+  /** Width of the density function grid */
+  width: number;
+  /** Height of the density function grid */
+  height: number;
+
+  /**
+   * Creates a new DensityFunction2D instance
+   * @constructor
+   * @param {DensityFunction2D | number[][]} data - Either an existing DensityFunction2D or a 2D array of density values
+   */
+  constructor(data: DensityFunction2D | number[][]) {
+    if (data instanceof DensityFunction2D) {
+      this.data = data.data;
+      this.width = data.width;
+      this.height = data.height;
+    } else {
+      this.data = data;
+      this.width = data.length;
+      this.height = data[0].length;
+    }
+
+    // Normalize the density values to [0,1] range
+    this.normalize();
+  }
+
+  /**
+   * Normalizes density values to range [0,1]
+   * @private
+   */
+  normalize() {
+    const { min, max } = Util.minMaxOfArray2D(this.data);
+    const range = max - min;
+    this.data = this.data.map((row) => row.map((d) => (d - min) / range));
+  }
+
+  /**
+   * Gets density value at specific coordinates
+   * @param {number} x - X coordinate
+   * @param {number} y - Y coordinate
+   * @returns {number} Density value at (x,y)
+   */
+  densityAt(x: number, y: number): number {
+    return this.data[x][y];
+  }
+
+  /**
+   * Calculates total density within a polygon
+   * @param {Array&lt;[number, number]>} polygon - Array of polygon vertices
+   * @returns {number} Total density within polygon
+   */
+  densityInPolygon(polygon: Array&lt;[number, number]>): number {
+    let sum = 0;
+    const x_cords = polygon.map((point) => point[0]);
+    const y_cords = polygon.map((point) => point[1]);
+
+    const x_min = Math.min(...x_cords);
+    const x_max = Math.max(...x_cords);
+    const y_min = Math.min(...y_cords);
+    const y_max = Math.max(...y_cords);
+
+    for (let x = x_min; x &lt; Math.max(x_max, this.height); x++) {
+      for (let y = y_min; y &lt; Math.max(y_max, this.width); y++) {
+        if (d3.polygonContains(polygon, [x, y])) {
+          sum += this.densityAt(x, y);
+        }
+      }
+    }
+
+    return sum;
+  }
+
+  /**
+   * Gets bounding box of a polygon
+   * @param {Array&lt;[number, number]>} polygon - Array of polygon vertices
+   * @returns {Object} Bounding box coordinates
+   */
+  getBoundingBoxOfPolygon(polygon: Array&lt;[number, number]>): {
+    minX: number;
+    maxX: number;
+    minY: number;
+    maxY: number;
+  } {
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    for (let i = 0; i &lt; polygon.length; i++) {
+      const [x, y] = polygon[i];
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y);
+      maxY = Math.max(maxY, y);
+    }
+    return { minX, maxX, minY, maxY };
+  }
+
+  /**
+   * Assigns density values to stipples based on their Voronoi cells
+   * @param {Stipple[]} stipples - Array of stipples
+   * @param {Voronoi&lt;Stipple>} voronoi - Voronoi diagram
+   * @returns {Stipple[]} Updated stipples with assigned densities
+   */
+  assignDensity(stipples: Stipple[], voronoi: Voronoi&lt;Stipple>): Stipple[] {
+    return stipples.map((stipple, i) => {
+      const cell = voronoi.cellPolygon(i);
+
+      if (!cell) {
+        stipple.density = 0;
+        return stipple;
+      }
+
+      let totalDensity = 0;
+      let totalArea = 0.1;
+
+      // Calculate bounding box manually
+      const xs = cell.map((point) => point[0]);
+      const ys = cell.map((point) => point[1]);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+
+      // Iterate through pixels in Voronoi cell
+      for (let y = Math.floor(minY); y &lt;= Math.ceil(maxY); y++) {
+        for (let x = Math.floor(minX); x &lt;= Math.ceil(maxX); x++) {
+          if (d3.polygonContains(cell, [x, y])) {
+            const density = this.densityAt(x, y);
+            if (isNaN(density)) {
+              debugger;
+            }
+            totalDensity += density;
+            totalArea += 1;
+          }
+        }
+      }
+
+      stipple.density = totalDensity;
+      return stipple;
+    });
+  }
+
+  /**
+   * Creates a quantization of the range [0, 1]
+   * @param {number} num - Number of quantization steps
+   * @returns {number[]} Array of quantization values
+   * @static
+   */
+  static createQuantisation(num: number) {
+    const quantisation = [];
+    for (let i = 0; i &lt; num; i++) {
+      quantisation.push(i / num);
+    }
+    return quantisation;
+  }
+
+  /**
+   * Quantizes an array of numbers using given quantization levels
+   * @param {number[]} array - Array to quantize
+   * @param {number[]} quantisation - Quantization levels
+   * @returns {number[]} Quantized array
+   * @static
+   */
+  static quantise(array: number[], quantisation: number[]) {
+    return array.map((p) => {
+      for (let i = 0; i &lt; quantisation.length; ++i) {
+        if (p &lt; quantisation[i]) {
+          if (i === 0) {
+            return 0;
+          } else {
+            return quantisation[i - 1];
+          }
+        }
+      }
+      return 1.0;
+    });
+  }
+
+  /**
+   * Creates a Mach banding effect on the density function
+   * @param {number[]} [quantisation] - Quantization levels
+   * @param {number} [weight=0.5] - Blending weight
+   * @param {number} [blurRadius=4] - Blur radius
+   * @returns {DensityFunction2D} New density function with Mach banding
+   */
+  public createMachBanding2D(
+    quantisation: number[] = DensityFunction2D.createQuantisation(5),
+    weight = 0.5,
+    blurRadius = 4
+  ): DensityFunction2D {
+    const quantisedData = this.data.map((row) =>
+      DensityFunction2D.quantise(row, quantisation)
+    );
+    const blurSize = Math.pow(blurRadius, 2.0) * Math.PI;
+    const imageData = this.float2DtoImage(quantisedData);
+
+    const offscreenCanvas = new OffscreenCanvas(
+      imageData.width,
+      imageData.height
+    );
+    const blurringContext = offscreenCanvas.getContext("2d")!;
+    blurringContext.putImageData(imageData, 0, 0);
+    blurringContext.filter = `blur(${blurSize}px)`;
+    blurringContext.drawImage(offscreenCanvas, 0, 0);
+    const blurredImage = blurringContext.getImageData(
+      0,
+      0,
+      imageData.width,
+      imageData.height
+    );
+    const blurredData = this.image2DtoFloat(blurredImage);
+
+    const machBanded = [];
+    for (let i = 0; i &lt; imageData.width * imageData.height; ++i) {
+      machBanded.push(
+        Math.min(
+          1,
+          Math.max(
+            0,
+            weight * blurredData[i] + (1 - weight) * quantisedData.flat()[i]
+          )
+        )
+      );
+    }
+
+    // Convert back to 2D array
+    const machBanded2D = [];
+    for (let i = 0; i &lt; imageData.height; i++) {
+      machBanded2D.push(
+        machBanded.slice(i * imageData.width, (i + 1) * imageData.width)
+      );
+    }
+
+    return new DensityFunction2D(machBanded2D);
+  }
+
+  /**
+   * Converts 2D float array to ImageData
+   * @param {number[][]} data - 2D array of float values
+   * @returns {ImageData} Converted image data
+   */
+  public float2DtoImage(data: number[][]): ImageData {
+    return new ImageData(
+      new Uint8ClampedArray(data.flat().map((v) => v * 255)),
+      data.length,
+      data[0].length
+    );
+  }
+
+  /**
+   * Converts ImageData to float array
+   * @param {ImageData} imageData - Image data to convert
+   * @returns {number[]} Array of float values
+   */
+  public image2DtoFloat(imageData: ImageData): number[] {
+    const data = imageData.data;
+    const floatData = [];
+    for (let i = 0; i &lt; data.length; i += 4) {
+      floatData.push(data[i] / 255);
+    }
+    return floatData;
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

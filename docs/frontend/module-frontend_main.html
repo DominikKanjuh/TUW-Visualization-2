@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> frontend/main</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">TUW Visualization 2 Documentation by David Bauer and Dominik Kanjuh</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-backend_config_db.html">backend/config/db</a></li><li><a href="module-backend_index.html">backend/index</a></li><li><a href="module-backend_routes_stiples.html">backend/routes/stiples</a></li><li><a href="module-frontend_ProgressBar.html">frontend/ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.html">frontend/Stippling/BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.html">frontend/Stippling/DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.html">frontend/Stippling/DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.html">frontend/Stippling/DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.html">frontend/Stippling/DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.html">frontend/Stippling/Stipple</a></li><li><a href="module-frontend_Stippling_stippleWorker.html">frontend/Stippling/stippleWorker</a></li><li><a href="module-frontend_api_routes.html">frontend/api/routes</a></li><li><a href="module-frontend_api_utils.html">frontend/api/utils</a></li><li><a href="module-frontend_camera.html">frontend/camera</a></li><li><a href="module-frontend_components_drawer.html">frontend/components/drawer</a></li><li><a href="module-frontend_main.html">frontend/main</a></li><li><a href="module-frontend_ortho_camera.html">frontend/ortho_camera</a></li></ul><h3>Classes</h3><ul><li><a href="CircleHelper.html">CircleHelper</a></li><li><a href="Util.html">Util</a></li><li><a href="module-frontend_ProgressBar.ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar.ProgressBar_ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar-ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler_BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler-BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D_DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder_DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder-DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction_DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction-DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2D-DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear_DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear-DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple_Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling_Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple-Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple-Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple_WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_camera-Camera.html">Camera</a></li><li><a href="module-frontend_camera-Camera_Camera.html">Camera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera_OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera-OrthoCamera.html">OrthoCamera</a></li></ul><h3>Interfaces</h3><ul><li><a href="PostgresError.html">PostgresError</a></li><li><a href="QueryParams.html">QueryParams</a></li><li><a href="Stiple.html">Stiple</a></li><li><a href="StiplesQueryParams.html">StiplesQueryParams</a></li><li><a href="StiplesResponse.html">StiplesResponse</a></li><li><a href="Stipple.html">Stipple</a></li><li><a href="StipplesRow.html">StipplesRow</a></li><li><a href="TableConfig.html">TableConfig</a></li><li><a href="ValidatedParams.html">ValidatedParams</a></li><li><a href="ValidationFailure.html">ValidationFailure</a></li><li><a href="ValidationSuccess.html">ValidationSuccess</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DATASET_CONFIGS">DATASET_CONFIGS</a></li><li><a href="global.html#fetchStiples">fetchStiples</a></li><li><a href="global.html#generateBuffers">generateBuffers</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Module</p>
+                    <h1>frontend/main</h1>
+                </header>
+                
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Main application entry point handling WebGPU visualization, map integration, and UI controls</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line2">line 2</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+<h4 class="name" id="~canvas">
+    <a class="href-link" href="#~canvas">#</a>
+    
+        
+            <span class='tag'>inner</span>
+        
+            <span class='tag'>constant</span>
+        
+    
+    <span class="code-name">
+        canvas
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>WebGPU initialization and pipeline setup
+Handles canvas context, shaders, and buffer creation</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line46">line 46</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="~map">
+    <a class="href-link" href="#~map">#</a>
+    
+        
+            <span class='tag'>inner</span>
+        
+    
+    <span class="code-name">
+        map
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Global map instance</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line21">line 21</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="~observer">
+    <a class="href-link" href="#~observer">#</a>
+    
+        
+            <span class='tag'>inner</span>
+        
+            <span class='tag'>constant</span>
+        
+    
+    <span class="code-name">
+        observer
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>ResizeObserver callback for canvas resizing
+Updates canvas dimensions and triggers re-render</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line267">line 267</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="~staticUnitSize">
+    <a class="href-link" href="#~staticUnitSize">#</a>
+    
+        
+            <span class='tag'>inner</span>
+        
+            <span class='tag'>constant</span>
+        
+    
+    <span class="code-name">
+        staticUnitSize
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Unit size for static vertex data in bytes</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line102">line 102</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="~uniformBufferSize">
+    <a class="href-link" href="#~uniformBufferSize">#</a>
+    
+        
+            <span class='tag'>inner</span>
+        
+            <span class='tag'>constant</span>
+        
+    
+    <span class="code-name">
+        uniformBufferSize
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Uniform buffer layout in bytes</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line122">line 122</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Methods</h1>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~createCircleVertices">
+        <a class="href-link" href="#~createCircleVertices">#</a>
+        
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                createCircleVertices<span class="signature">(numSegments)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Create a circle with a given number of segments and radius without an index buffer.
+The first vertex is the center of the circle. The next vertex is the top point on the circle.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>numSegments</code></td>
+  
+
+  <td class="type">
+  
+  </td>
+
+  
+
+  
+      <td class="default">
+      
+          32
+      
+      </td>
+  
+
+  <td class="description last"><p>The number of segments to use for the circle.</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line286">line 286</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~fetchStipples">
+        <a class="href-link" href="#~fetchStipples">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                fetchStipples<span class="signature">(type)</span><span class="type-signature"> &rarr; {Promise.&lt;DensityFunction2D>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Fetches and processes stipple data from the API</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>type</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="global.html#DataSetType">DataSetType</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Dataset type to fetch</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line349">line 349</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>Processed density function</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Promise.&lt;DensityFunction2D></code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~generateFrame">
+        <a class="href-link" href="#~generateFrame">#</a>
+        
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                generateFrame<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Generates and submits a new frame for rendering
+Updates uniforms and executes the render pass</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line247">line 247</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~hexcodeToVec4">
+        <a class="href-link" href="#~hexcodeToVec4">#</a>
+        
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                hexcodeToVec4<span class="signature">(hexcode)</span><span class="type-signature"> &rarr; {Float32Array}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Converts a hex color code to a WebGPU-compatible vec4 array.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>hexcode</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>A hex color code (e.g., &quot;#FFFFFF&quot;).</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line236">line 236</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>A normalized vec4 array representing the color.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Float32Array</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~initializeMap">
+        <a class="href-link" href="#~initializeMap">#</a>
+        
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                initializeMap<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Initializes the Leaflet map with OpenStreetMap tiles</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line25">line 25</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~onFidelityScaleChange">
+        <a class="href-link" href="#~onFidelityScaleChange">#</a>
+        
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                onFidelityScaleChange<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Updates fidelity values based on scale input
+X = scale * 3, Y = scale * 4 to maintain aspect ratio</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line325">line 325</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~updateUniform">
+        <a class="href-link" href="#~updateUniform">#</a>
+        
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                updateUniform<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Updates uniform buffer with current state
+Handles screen size, MVP matrix, point size, and colors</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line209">line 209</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~updateVertexBuffer">
+        <a class="href-link" href="#~updateVertexBuffer">#</a>
+        
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                updateVertexBuffer<span class="signature">(newData)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Updates the vertex buffer with new data</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>newData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Float32Array</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>New vertex data to upload</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_main.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_main.ts.html">frontend/src/main.ts</a>, <a href="frontend_src_main.ts.html#line150">line 150</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

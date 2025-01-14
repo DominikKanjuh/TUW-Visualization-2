@@ -1,0 +1,2859 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Camera</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">TUW Visualization 2 Documentation by David Bauer and Dominik Kanjuh</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-backend_config_db.html">backend/config/db</a></li><li><a href="module-backend_index.html">backend/index</a></li><li><a href="module-backend_routes_stiples.html">backend/routes/stiples</a></li><li><a href="module-frontend_ProgressBar.html">frontend/ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.html">frontend/Stippling/BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.html">frontend/Stippling/DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.html">frontend/Stippling/DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.html">frontend/Stippling/DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.html">frontend/Stippling/DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.html">frontend/Stippling/Stipple</a></li><li><a href="module-frontend_Stippling_stippleWorker.html">frontend/Stippling/stippleWorker</a></li><li><a href="module-frontend_api_routes.html">frontend/api/routes</a></li><li><a href="module-frontend_api_utils.html">frontend/api/utils</a></li><li><a href="module-frontend_camera.html">frontend/camera</a></li><li><a href="module-frontend_components_drawer.html">frontend/components/drawer</a></li><li><a href="module-frontend_main.html">frontend/main</a></li><li><a href="module-frontend_ortho_camera.html">frontend/ortho_camera</a></li></ul><h3>Classes</h3><ul><li><a href="CircleHelper.html">CircleHelper</a></li><li><a href="Util.html">Util</a></li><li><a href="module-frontend_ProgressBar.ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar.ProgressBar_ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar-ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler_BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler-BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D_DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder_DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder-DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction_DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction-DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2D-DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear_DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear-DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple_Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling_Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple-Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple-Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple_WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_camera-Camera.html">Camera</a></li><li><a href="module-frontend_camera-Camera_Camera.html">Camera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera_OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera-OrthoCamera.html">OrthoCamera</a></li></ul><h3>Interfaces</h3><ul><li><a href="PostgresError.html">PostgresError</a></li><li><a href="QueryParams.html">QueryParams</a></li><li><a href="Stiple.html">Stiple</a></li><li><a href="StiplesQueryParams.html">StiplesQueryParams</a></li><li><a href="StiplesResponse.html">StiplesResponse</a></li><li><a href="Stipple.html">Stipple</a></li><li><a href="StipplesRow.html">StipplesRow</a></li><li><a href="TableConfig.html">TableConfig</a></li><li><a href="ValidatedParams.html">ValidatedParams</a></li><li><a href="ValidationFailure.html">ValidationFailure</a></li><li><a href="ValidationSuccess.html">ValidationSuccess</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DATASET_CONFIGS">DATASET_CONFIGS</a></li><li><a href="global.html#fetchStiples">fetchStiples</a></li><li><a href="global.html#generateBuffers">generateBuffers</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Class</p>
+                    <h1>Camera</h1>
+                </header>
+                
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-frontend_camera.html">frontend/camera</a>~</span>Camera<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class='vertical-section'>
+                <div class="members">
+                    <div class="member">
+                        <div class=name>
+                            <span class="tag">Constructor</span>
+                        </div>
+                        
+
+
+    
+    <h4 class="name" id="Camera">
+        <a class="href-link" href="#Camera">#</a>
+        
+        <span class="code-name">
+            
+                new Camera<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Camera class for 3D scene viewing
+Handles view and projection matrices for perspective projection</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line7">line 7</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-frontend_camera-Camera_Camera.html">Camera</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+<h4 class="name" id="eye">
+    <a class="href-link" href="#eye">#</a>
+    
+    <span class="code-name">
+        eye
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Camera position in world space</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line18">line 18</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="perspectiveMatrix">
+    <a class="href-link" href="#perspectiveMatrix">#</a>
+    
+    <span class="code-name">
+        perspectiveMatrix
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Perspective projection matrix</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line14">line 14</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="target">
+    <a class="href-link" href="#target">#</a>
+    
+    <span class="code-name">
+        target
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Point the camera is looking at</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line20">line 20</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="up">
+    <a class="href-link" href="#up">#</a>
+    
+    <span class="code-name">
+        up
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Up vector for camera orientation</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line22">line 22</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="viewMatrix">
+    <a class="href-link" href="#viewMatrix">#</a>
+    
+    <span class="code-name">
+        viewMatrix
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>View matrix for camera position and orientation</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line16">line 16</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Methods</h1>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getEye">
+        <a class="href-link" href="#getEye">#</a>
+        
+        <span class="code-name">
+            
+                getEye<span class="signature">()</span><span class="type-signature"> &rarr; {vec3.default}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Gets the camera's position</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line183">line 183</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>Camera position</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">vec3.default</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getTarget">
+        <a class="href-link" href="#getTarget">#</a>
+        
+        <span class="code-name">
+            
+                getTarget<span class="signature">()</span><span class="type-signature"> &rarr; {vec3.default}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Gets the camera's target point</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line176">line 176</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>Target point</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">vec3.default</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getViewProjectionMatrix">
+        <a class="href-link" href="#getViewProjectionMatrix">#</a>
+        
+        <span class="code-name">
+            
+                getViewProjectionMatrix<span class="signature">()</span><span class="type-signature"> &rarr; {Float32Array}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Gets the combined view-projection matrix</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line169">line 169</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>View-projection matrix</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Float32Array</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="refreshViewMatrix">
+        <a class="href-link" href="#refreshViewMatrix">#</a>
+        
+        <span class="code-name">
+            
+                refreshViewMatrix<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Updates the view matrix based on current camera position</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line152">line 152</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">void</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="translateCamera">
+        <a class="href-link" href="#translateCamera">#</a>
+        
+        <span class="code-name">
+            
+                translateCamera<span class="signature">(x, y, z)</span><span class="type-signature"> &rarr; {void}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Translates the camera in world space</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>x</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>X-axis translation</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>y</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Y-axis translation</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>z</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Z-axis translation</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line162">line 162</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">void</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-frontend_camera.html">frontend/camera</a>~</span>Camera<span class="signature">(fovY, aspect, near, far, eye<span class="signature-attributes">opt</span>, target<span class="signature-attributes">opt</span>, up<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class='vertical-section'>
+                <div class="members">
+                    <div class="member">
+                        <div class=name>
+                            <span class="tag">Constructor</span>
+                        </div>
+                        
+
+
+    
+    <h4 class="name" id="Camera">
+        <a class="href-link" href="#Camera">#</a>
+        
+        <span class="code-name">
+            
+                new Camera<span class="signature">(fovY, aspect, near, far, eye<span class="signature-attributes">opt</span>, target<span class="signature-attributes">opt</span>, up<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Creates a new perspective camera</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>fovY</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last"><p>Vertical field of view in radians</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>aspect</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last"><p>Aspect ratio (width/height)</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>near</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last"><p>Near clipping plane distance</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>far</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last"><p>Far clipping plane distance</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>eye</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">vec3.default</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          [0,0,-3]
+      
+      </td>
+  
+
+  <td class="description last"><p>Camera position</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>target</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">vec3.default</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          [0,0,1]
+      
+      </td>
+  
+
+  <td class="description last"><p>Look-at target</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>up</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">vec3.default</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          [0,1,0]
+      
+      </td>
+  
+
+  <td class="description last"><p>Up vector</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line34">line 34</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-frontend_camera-Camera_Camera.html">Camera</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+<h4 class="name" id="eye">
+    <a class="href-link" href="#eye">#</a>
+    
+    <span class="code-name">
+        eye
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Camera position in world space</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line18">line 18</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="perspectiveMatrix">
+    <a class="href-link" href="#perspectiveMatrix">#</a>
+    
+    <span class="code-name">
+        perspectiveMatrix
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Perspective projection matrix</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line14">line 14</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="target">
+    <a class="href-link" href="#target">#</a>
+    
+    <span class="code-name">
+        target
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Point the camera is looking at</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line20">line 20</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="up">
+    <a class="href-link" href="#up">#</a>
+    
+    <span class="code-name">
+        up
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Up vector for camera orientation</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line22">line 22</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="viewMatrix">
+    <a class="href-link" href="#viewMatrix">#</a>
+    
+    <span class="code-name">
+        viewMatrix
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>View matrix for camera position and orientation</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line16">line 16</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Methods</h1>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getEye">
+        <a class="href-link" href="#getEye">#</a>
+        
+        <span class="code-name">
+            
+                getEye<span class="signature">()</span><span class="type-signature"> &rarr; {vec3.default}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Gets the camera's position</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line183">line 183</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>Camera position</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">vec3.default</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getTarget">
+        <a class="href-link" href="#getTarget">#</a>
+        
+        <span class="code-name">
+            
+                getTarget<span class="signature">()</span><span class="type-signature"> &rarr; {vec3.default}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Gets the camera's target point</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line176">line 176</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>Target point</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">vec3.default</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getViewProjectionMatrix">
+        <a class="href-link" href="#getViewProjectionMatrix">#</a>
+        
+        <span class="code-name">
+            
+                getViewProjectionMatrix<span class="signature">()</span><span class="type-signature"> &rarr; {Float32Array}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Gets the combined view-projection matrix</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line169">line 169</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>View-projection matrix</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Float32Array</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="refreshViewMatrix">
+        <a class="href-link" href="#refreshViewMatrix">#</a>
+        
+        <span class="code-name">
+            
+                refreshViewMatrix<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Updates the view matrix based on current camera position</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line152">line 152</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">void</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="translateCamera">
+        <a class="href-link" href="#translateCamera">#</a>
+        
+        <span class="code-name">
+            
+                translateCamera<span class="signature">(x, y, z)</span><span class="type-signature"> &rarr; {void}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Translates the camera in world space</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>x</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>X-axis translation</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>y</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Y-axis translation</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>z</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Z-axis translation</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_camera.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_camera.ts.html">frontend/src/camera.ts</a>, <a href="frontend_src_camera.ts.html#line162">line 162</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">void</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

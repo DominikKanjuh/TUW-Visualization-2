@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Stiple</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">TUW Visualization 2 Documentation by David Bauer and Dominik Kanjuh</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-backend_config_db.html">backend/config/db</a></li><li><a href="module-backend_index.html">backend/index</a></li><li><a href="module-backend_routes_stiples.html">backend/routes/stiples</a></li><li><a href="module-frontend_ProgressBar.html">frontend/ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.html">frontend/Stippling/BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.html">frontend/Stippling/DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.html">frontend/Stippling/DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.html">frontend/Stippling/DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.html">frontend/Stippling/DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.html">frontend/Stippling/Stipple</a></li><li><a href="module-frontend_Stippling_stippleWorker.html">frontend/Stippling/stippleWorker</a></li><li><a href="module-frontend_api_routes.html">frontend/api/routes</a></li><li><a href="module-frontend_api_utils.html">frontend/api/utils</a></li><li><a href="module-frontend_camera.html">frontend/camera</a></li><li><a href="module-frontend_components_drawer.html">frontend/components/drawer</a></li><li><a href="module-frontend_main.html">frontend/main</a></li><li><a href="module-frontend_ortho_camera.html">frontend/ortho_camera</a></li></ul><h3>Classes</h3><ul><li><a href="CircleHelper.html">CircleHelper</a></li><li><a href="Util.html">Util</a></li><li><a href="module-frontend_ProgressBar.ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar.ProgressBar_ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_ProgressBar-ProgressBar.html">ProgressBar</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler.BufferHandler_BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_BufferHandler-BufferHandler.html">BufferHandler</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2D.DensityFunction2D_DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder.DensityFunction2DEggholder_DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DEggholder-DensityFunction2DEggholder.html">DensityFunction2DEggholder</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction.DensityFunction2DRastrigrinFunction_DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2DRastrigrinFunction-DensityFunction2DRastrigrinFunction.html">DensityFunction2DRastrigrinFunction</a></li><li><a href="module-frontend_Stippling_DensityFunction2D-DensityFunction2D.html">DensityFunction2D</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear.DensityFunctionLinear_DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_DensityFunctionLinear-DensityFunctionLinear.html">DensityFunctionLinear</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stipple_Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple.Stippling_Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_Stipple-Stipple.html">Stipple</a></li><li><a href="module-frontend_Stippling_Stipple-Stippling.html">Stippling</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_Stippling_stippleWorker-WorkerStipple_WorkerStipple.html">WorkerStipple</a></li><li><a href="module-frontend_camera-Camera.html">Camera</a></li><li><a href="module-frontend_camera-Camera_Camera.html">Camera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera.OrthoCamera_OrthoCamera.html">OrthoCamera</a></li><li><a href="module-frontend_ortho_camera-OrthoCamera.html">OrthoCamera</a></li></ul><h3>Interfaces</h3><ul><li><a href="PostgresError.html">PostgresError</a></li><li><a href="QueryParams.html">QueryParams</a></li><li><a href="Stiple.html">Stiple</a></li><li><a href="StiplesQueryParams.html">StiplesQueryParams</a></li><li><a href="StiplesResponse.html">StiplesResponse</a></li><li><a href="Stipple.html">Stipple</a></li><li><a href="StipplesRow.html">StipplesRow</a></li><li><a href="TableConfig.html">TableConfig</a></li><li><a href="ValidatedParams.html">ValidatedParams</a></li><li><a href="ValidationFailure.html">ValidationFailure</a></li><li><a href="ValidationSuccess.html">ValidationSuccess</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DATASET_CONFIGS">DATASET_CONFIGS</a></li><li><a href="global.html#fetchStiples">fetchStiples</a></li><li><a href="global.html#generateBuffers">generateBuffers</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Interface</p>
+                    <h1>Stiple</h1>
+                </header>
+                
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>Stiple</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Interface definitions for the frontend API client</p></div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_api_interface.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_api_interface.ts.html">frontend/src/api/interface.ts</a>, <a href="frontend_src_api_interface.ts.html#line4">line 4</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">number</code>
+
+
+    </span>
+
+<h4 class="name" id="lat">
+    <a class="href-link" href="#lat">#</a>
+    
+    <span class="code-name">
+        lat
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Latitude coordinate</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_api_interface.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_api_interface.ts.html">frontend/src/api/interface.ts</a>, <a href="frontend_src_api_interface.ts.html#line9">line 9</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">number</code>
+
+
+    </span>
+
+<h4 class="name" id="lng">
+    <a class="href-link" href="#lng">#</a>
+    
+    <span class="code-name">
+        lng
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Longitude coordinate</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_api_interface.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_api_interface.ts.html">frontend/src/api/interface.ts</a>, <a href="frontend_src_api_interface.ts.html#line13">line 13</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">number</code>
+
+
+    </span>
+
+<h4 class="name" id="val">
+    <a class="href-link" href="#val">#</a>
+    
+    <span class="code-name">
+        val
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <p>Value at this point (e.g., pollution level, temperature)</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="frontend_src_api_interface.ts.html" class="button">View Source</a>
+            <span>
+                <a href="frontend_src_api_interface.ts.html">frontend/src/api/interface.ts</a>, <a href="frontend_src_api_interface.ts.html#line17">line 17</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>
