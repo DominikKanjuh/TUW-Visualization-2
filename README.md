@@ -11,8 +11,7 @@ This repository contains the project for the Visualization 2 (186.833) course at
 
 The project is structured as follows:
 
-- `proposals and presentations/`: Contains project proposals and presentation slides
-  \*\*\*\*- `database/`: Contains the sql files to fil the database as well as the initialization script
+- `database/`: Contains the sql files to fil the database as well as the initialization script
 - `backend/`: Contains the backend code, implemented in Node.js and Express.js
 - `frontend/`: Contains the frontend code, implemented using TypeScript and WebGPU
 
@@ -38,6 +37,21 @@ After successfully downloading the sql files you can run the docker compose to s
 
 ```bash
 docker-compose up --build
+```
+
+## How to generate the documentation
+
+```bash
+npm run docs:all
+```
+
+This will generate the documentation in the `docs/` folder.
+
+You can also generate the documentation for the backend and frontend separately by running:
+
+```bash
+npm run docs:backend
+npm run docs:frontend
 ```
 
 ## License
