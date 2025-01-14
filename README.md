@@ -27,7 +27,14 @@ chmod +x database/download-sql.sh
 ./database/download-sql.sh
 ```
 
-We've also made the docker compose so you can just run the whole project on your machine using:
+If you encounter errors while running the script, you can manually download the files from the onedrive links and put them in the /database/sql/ folder.
+Links:
+
+- [air_pollution_import.sql](https://1drv.ms/u/s!AqjaHlNJFPaTyPgcoE-xWs24SeERvQ?e=wxWQe6)
+- [earth_relief_import.sql](https://1drv.ms/u/s!AqjaHlNJFPaTyPgbm1i6fFWasH1IFg?e=ZlQmtx)
+- [temperature_import.sql](https://1drv.ms/u/s!AqjaHlNJFPaTyPga_Xvu1PGFiCOXkg?e=nVlDaU)
+
+After successfully downloading the sql files you can run the docker compose to start the project:
 
 ```bash
 docker-compose up --build
