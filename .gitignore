@@ -4,4 +4,4 @@ dist/
 .env
 .idea
 .vscode
-database/sql/*.sql
+database/sql/
