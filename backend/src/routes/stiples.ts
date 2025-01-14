@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Router handling stipple generation endpoints
+ * @module backend/routes/stiples
+ */
+
 import express, { Request, Response, Router } from "express";
 import pool from "../config/db";
 import {
@@ -13,6 +18,11 @@ import {
 
 const router: Router = express.Router();
 
+/**
+ * Validates and parses query parameters for stipple generation
+ * @param {Partial<QueryParams>} params - Raw query parameters from the request
+ * @returns {ValidationResult} Validation result with either parsed parameters or error message
+ */
 const validateQueryParams = (
   params: Partial<QueryParams>
 ): ValidationResult => {
@@ -74,6 +84,17 @@ const validateQueryParams = (
   return { isValid: true, params: numParams };
 };
 
+/**
+ * Assigns points to a uniform grid based on closest distance
+ * @param {StipplesRow[]} stipples - Array of raw stipple points from database
+ * @param {number} w - Width of the output grid
+ * @param {number} h - Height of the output grid
+ * @param {number} minLng - Minimum longitude of the bounding box
+ * @param {number} maxLng - Maximum longitude of the bounding box
+ * @param {number} minLat - Minimum latitude of the bounding box
+ * @param {number} maxLat - Maximum latitude of the bounding box
+ * @returns {Stipple[][]} 2D array of stipples assigned to grid cells
+ */
 const assignPointsToGrid = (
   stipples: StipplesRow[],
   w: number,
@@ -132,6 +153,12 @@ const assignPointsToGrid = (
   return grid;
 };
 
+/**
+ * Fetches and processes stipple data for a specific dataset
+ * @param {DatasetType} dataset - Type of dataset to query (air_pollution, temperature, or earth_relief)
+ * @param {ValidatedParams} params - Validated query parameters
+ * @param {Response} res - Express response object
+ */
 const getStiplesForDataset = async (
   dataset: DatasetType,
   params: ValidatedParams,
@@ -219,6 +246,13 @@ const getStiplesForDataset = async (
   }
 };
 
+/**
+ * GET /api/stiples/air_pollution
+ * Retrieves stipple data for air pollution dataset
+ * @route GET /api/stiples/air_pollution
+ * @param {QueryParams} req.query - Query parameters for stipple generation
+ * @returns {Object} JSON object containing grid of stipples
+ */
 router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
   const validation = validateQueryParams(req.query as Partial<QueryParams>);
   if (!validation.isValid) {
@@ -227,6 +261,13 @@ router.get("/stiples/air_pollution", async (req: Request, res: Response) => {
   await getStiplesForDataset("air_pollution", validation.params, res);
 });
 
+/**
+ * GET /api/stiples/temperature
+ * Retrieves stipple data for temperature dataset
+ * @route GET /api/stiples/temperature
+ * @param {QueryParams} req.query - Query parameters for stipple generation
+ * @returns {Object} JSON object containing grid of stipples
+ */
 router.get("/stiples/temperature", async (req: Request, res: Response) => {
   const validation = validateQueryParams(req.query as Partial<QueryParams>);
   if (!validation.isValid) {
@@ -235,6 +276,13 @@ router.get("/stiples/temperature", async (req: Request, res: Response) => {
   await getStiplesForDataset("temperature", validation.params, res);
 });
 
+/**
+ * GET /api/stiples/earth_relief
+ * Retrieves stipple data for earth relief dataset
+ * @route GET /api/stiples/earth_relief
+ * @param {QueryParams} req.query - Query parameters for stipple generation
+ * @returns {Object} JSON object containing grid of stipples
+ */
 router.get("/stiples/earth_relief", async (req: Request, res: Response) => {
   const validation = validateQueryParams(req.query as Partial<QueryParams>);
   if (!validation.isValid) {
@@ -243,6 +291,12 @@ router.get("/stiples/earth_relief", async (req: Request, res: Response) => {
   await getStiplesForDataset("earth_relief", validation.params, res);
 });
 
+/**
+ * GET /api/stiples/health
+ * Health check endpoint for the stipples API
+ * @route GET /api/stiples/health
+ * @returns {Object} JSON object containing health status
+ */
 router.get("/stiples/health", async (_req: Request, res: Response) => {
   try {
     await pool.query("SELECT 1");

@@ -1,0 +1,17 @@
+{
+  "name": "tuw-visualization-2",
+  "version": "1.0.0",
+  "description": "This repository contains the project for the Visualization 2 (186.833) course at TU Wien during the Winter 2024 semester. The project implements [Linde-Buzo-Gray algorithm](https://en.wikipedia.org/wiki/Linde%E2%80%93Buzo%E2%80%93Gray_algorithm) for stippling of 2D Scalar fields, based on the research paper [Stippling of 2D Scalar Fields](https://ieeexplore.ieee.org/document/8667696) by Görtler et al.",
+  "scripts": {
+    "docs:all": "npm run docs:backend && npm run docs:frontend",
+    "docs:backend": "rimraf ./docs/backend && jsdoc -c ./.jsdoc.conf.json --destination ./docs/backend --include backend/src",
+    "docs:frontend": "rimraf ./docs/frontend && jsdoc -c ./.jsdoc.conf.json --destination ./docs/frontend --include frontend/src"
+  },
+  "author": "David Bauer and Dominik Kanjuh",
+  "devDependencies": {
+    "better-docs": "^2.7.3",
+    "jsdoc": "^4.0.4",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
+  }
+}

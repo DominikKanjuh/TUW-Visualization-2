@@ -1,0 +1,21 @@
+{
+  "source": {
+    "include": ["README.md", "backend/src", "frontend/src"],
+    "includePattern": ".+\\.ts$",
+    "excludePattern": "(node_modules/|dist/|docs/)"
+  },
+  "plugins": ["plugins/markdown", "better-docs/typescript"],
+  "opts": {
+    "destination": "./docs",
+    "recurse": true,
+    "template": "node_modules/better-docs"
+  },
+  "templates": {
+    "better-docs": {
+      "name": "TUW Visualization 2 Documentation by David Bauer and Dominik Kanjuh"
+    }
+  },
+  "tags": {
+    "allowUnknownTags": ["typescript"]
+  }
+}
