@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stippling of 2D Scalar Fields</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        margin: 20px 0;
+      }
+      .authors {
+        color: #666;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stippling of 2D Scalar Fields</h1>
+    <p class="authors">By David Bauer and Dominik Kanjuh</p>
+
+    <p>
+      This project was developed for the Visualization 2 (186.833) course at TU
+      Wien during the Winter 2024 semester.
+    </p>
+
+    <p>
+      The project implements
+      <a
+        href="https://en.wikipedia.org/wiki/Linde%E2%80%93Buzo%E2%80%93Gray_algorithm"
+        >Linde-Buzo-Gray algorithm</a
+      >
+      for stippling of 2D Scalar fields, based on the research paper
+      <a href="https://ieeexplore.ieee.org/document/8667696"
+        >Stippling of 2D Scalar Fields</a
+      >
+      by Görtler et al.
+    </p>
+
+    <h2>Project Structure</h2>
+    <ul>
+      <li>
+        <code>database/</code>: Contains the SQL files and initialization script
+      </li>
+      <li>
+        <code>backend/</code>: Contains the backend code (Node.js and
+        Express.js)
+      </li>
+      <li>
+        <code>frontend/</code>: Contains the frontend code (TypeScript and
+        WebGPU)
+      </li>
+    </ul>
+
+    <h2>Example Visualizations</h2>
+    <img
+      src="./images/screenshot-1.jpg"
+      alt="Example Stippling Visualization 1"
+    />
+    <img
+      src="./images/screenshot-2.jpg"
+      alt="Example Stippling Visualization 2"
+    />
+
+    <h2>Running the Project</h2>
+    <p>
+      Each of the backend and frontend code has its own README file with
+      instructions on how to run the code separately on your local machine.
+    </p>
+
+    <p>
+      Note: Since the SQL files to populate the database were too large for
+      GitHub, they've been stored on OneDrive. To download them, you can run the
+      script <code>/database/download-sql.sh</code>
+    </p>
+  </body>
+</html>
