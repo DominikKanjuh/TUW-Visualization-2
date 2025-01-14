@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "9090:9090"
+    depends_on:
+      - backend
+    environment:
+      - API_BASE=http://backend:3000
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=your_password_here
+      - DB_NAME=vis_2_geodb
+      - DB_HOST=database
+      - PORT=3000
+
+  database:
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_password_here
+      - POSTGRES_DB=vis_2_geodb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

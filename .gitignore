@@ -6,3 +6,5 @@ dist/
 .vscode
 .parcel-cache
 /proba-frontend-*
+
+!database/sql/*.sql
