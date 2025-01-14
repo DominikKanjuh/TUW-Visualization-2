@@ -186,7 +186,6 @@ const renderPassDescriptor = {
   },
 } as GPURenderPassDescriptor;
 
-// const camera = new Camera(Math.PI / 3, aspect, 1, 10000);
 const camera = new OrthoCamera(-aspect, aspect, -1, 1, 1, 10000);
 camera.translateCamera(0, 0, -700);
 
@@ -204,9 +203,7 @@ canvas.onmousemove = (e) => {
     // camera should move faster the further away it is from the target
     const distance = vec3.distance(camera.getEye(), camera.getTarget());
     const speed = Math.max(0.01, Math.min(100, distance)) * movement_speed;
-    // console.log(distance, speed);
     camera.translateCamera(-e.movementY * speed, e.movementX * speed, 0);
-    // camera.translateCamera(-e.movementX * movement_speed, -e.movementY * movement_speed, 0);
   }
   requestAnimationFrame(generateFrame);
 };
@@ -239,8 +236,6 @@ function updateUniform() {
     20
   ); // size 4
 
-  // uniformValues.set([parseFloat(stipple_size_multiplier_range.value)], 21); // size 4
-
   // * Color
   // First color (colorPicker1)
   uniformValues.set(hexcodeToVec4(colorPicker1.value), 24); // size 4
@@ -265,8 +260,6 @@ function hexcodeToVec4(hexcode: string): Float32Array {
 }
 
 function generateFrame() {
-  //   stats.begin();
-
   updateUniform();
 
   // Get the current texture from the canvas context and
@@ -289,9 +282,6 @@ function generateFrame() {
 
   const commandBuffer = encoder.finish();
   device.queue.submit([commandBuffer]);
-
-  //   stats.end();
-  // requestAnimationFrame(generateFrame);
 }
 
 const observer = new ResizeObserver((entries) => {

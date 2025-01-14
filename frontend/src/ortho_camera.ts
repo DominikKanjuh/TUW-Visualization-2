@@ -77,8 +77,6 @@ export class OrthoCamera {
       this.zoomCamera(z);
     }
 
-    // console.log("mapToLatLng", this.mapToLatLng());
-
     this.refreshProjectionMatrix();
     this.refreshViewMatrix();
   }
@@ -109,21 +107,12 @@ export class OrthoCamera {
 
   // make the orthographic area bigger or smaller
   public zoomCamera(zoom: number): void {
-    // console.log("zoom", zoom);
-    // this.projectionMatrix[0] += zoom;
-    // this.projectionMatrix[5] += zoom;
-    // this.projectionMatrix[10] += zoom;
-
     const speed = this.getZoomLevel() * 0.05;
 
     this.left += zoom * this.aspect * speed;
     this.right -= zoom * this.aspect * speed;
     this.bottom += zoom * speed;
     this.top -= zoom * speed;
-    // this.left -= zoom * this.aspect * speed;
-    // this.right += zoom * this.aspect * speed;
-    // this.bottom -= zoom * speed;
-    // this.top += zoom * speed;
   }
 
   private clamp(value: number, min: number, max: number): number {
