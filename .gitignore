@@ -4,7 +4,4 @@ dist/
 .env
 .idea
 .vscode
-.parcel-cache
-/proba-frontend-*
-
-!database/sql/*.sql
+database/sql/*.sql
