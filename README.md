@@ -2,6 +2,9 @@
 
 This repository contains the project for the Visualization 2 (186.833) course at TU Wien during the Winter 2024 semester. The project implements [Linde-Buzo-Gray algorithm](https://en.wikipedia.org/wiki/Linde%E2%80%93Buzo%E2%80%93Gray_algorithm) for stippling of 2D Scalar fields, based on the research paper [Stippling of 2D Scalar Fields](https://ieeexplore.ieee.org/document/8667696) by Görtler et al.
 
+> We are proud to announce that our project has been featured in the **Hall of Fame** for the Visualization 2 course at TU Wien.
+> You can check out the Hall of Fame entry here: [Hall of Fame 2024W](https://www.cg.tuwien.ac.at/courses/Vis2/HallOfFame/2024W)
+
 ## Team Members
 
 - David Bauer
