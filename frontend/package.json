@@ -35,7 +35,7 @@
     "@types/stats.js": "^0.17.3",
     "@webgpu/types": "^0.1.44",
     "css-loader": "^7.1.2",
-    "css-minimizer-webpack-plugin": "^7.0.0",
+    "css-minimizer-webpack-plugin": "^8.0.0",
     "mini-css-extract-plugin": "^2.9.2",
     "style-loader": "^4.0.0",
     "webpack-dev-server": "^5.2.0",
